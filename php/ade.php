@@ -41,8 +41,8 @@
 	}
 	
 	function printFooter() {
-		echo 	"		<div id=\"footer\">Par <a href=\"http://www.guillaumederval.be\" target=\"_blank\">Guillaume Derval</a>, ré-écrit sur Google App Engine par <a href=\"http://www.cdamman.tk\" target=\"_blank\">Corentin Damman</a>, basé sur le code de Ploki<br>" .
-				"		Voir le <a href=\"https://gist.github.com/GuillaumeDerval/6574088\" target=\"_blank\">code source PHP</a> ou <a href=\"http://ucl2ics.appspot.com/source.zip\" target=\"_blank\">code source App Engine</a> ! Utiliser <a href=\"http://ucl2ics.appspot.com/API.pdf\" target=\"_blank\">l'API</a></div>" .
+		echo 	"		<div id=\"footer\">Ré-écrit sur Google App Engine par <a href=\"http://www.cdamman.tk\" target=\"_blank\">Corentin Damman</a>, basé sur le code de Ploki<br>" .
+				"		Voir le <a href=\"https://github.com/cdamman/UCL2ICS\" target=\"_blank\">code source App Engine</a> ! Utiliser <a href=\"http://ucl2ics.appspot.com/API.pdf\" target=\"_blank\">l'API</a></div>" .
 				"	</body>" .
 				"</html>";
 	}

@@ -6,7 +6,6 @@
 	<static-files>
 	    <include path="/favicon.ico"/>
 	    <include path="/API.pdf"/>
-	    <include path="/source.zip"/>
 	    <include path="/css/*"/>
 	</static-files>
 	
