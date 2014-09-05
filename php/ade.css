@@ -1,0 +1,47 @@
+body
+{
+	text-align: left;
+	font-family: Roboto,arial,sans-serif;
+}
+
+form, .likeform
+{
+	font-size: 18px;
+	border: 1px solid black;
+	padding: 10px;
+	margin: 5px;
+	border-radius: 5px;
+}
+
+h1
+{
+}
+
+h1 span#version
+{
+	font-size: 16px;
+	font-family: Roboto,arial,sans-serif;
+}
+
+#footer
+{
+	text-align: center;
+	font-size: 12px;
+	font-family: Roboto,arial,sans-serif;
+	padding: 10px;
+	margin: 5px;
+}
+
+.monospace
+{
+	font-family: monospace;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	word-break:break-all;
+	word-wrap:break-word;
+	padding: 8px;
+	background-color: #EEE;
+	margin: 10px;
+	border-radius: 5px;
+}

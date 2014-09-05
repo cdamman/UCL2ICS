@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   -->
+
+<html>
+	<head>
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link rel="shortcut icon" type="image/x-icon" href="http://ucl2icsphp.appspot.com/favicon.ico">
+		<link rel="stylesheet" type="text/css" href="http://ucl2ics.appspot.com/css/zocial.css">
+		<link rel="stylesheet" type="text/css" href="http://ucl2icsphp.appspot.com/ade.css">
+    	<title>UCL ADE to ICS</title>
+  	</head>
+
+  	<body>
+    	<h1><a href="http://ucl2ics.appspot.com" style="text-decoration:none; color:#000;">UCL ADE to ICS</a> <span id="version">2014-2015 App Engine EDITION (v6)</span></h1>
+	
+    	<form class="top" id="formulaire" method="get" action="/ucl2ics">
+    	<center><p><label>Cet outil a pour objectif d'exporter le calendrier universitaire fourni par <b>ADE Expert</b> (ou <a href="https://www.uclouvain.be/horaires-epl.html" target="_blank">l'outil horaire de l'EPL</a> ou celui de votre FAC)<br>
+    	 vers vos gestionnaires de calendrier préférés comme <b>Google Agenda</b> ou <b>iCalendar</b></label><br>
+    	<input type="hidden" name="begin" value="true"></p>
+    	<input type="submit" value="Commencer !" class="zocial secondary"></center>
+    	</form>
+    	
+    	<br/>
+    	
+    	<form class="top" id="formulaire" method="get" action="/login">
+    	<center><p><label>Vous pouvez également vous <b>connecter</b> grâce à votre compte <b>Google</b> ou <b>Google UCL</b> afin de pouvoir modifier votre<br>synchronisation horaire ICS dans le futur</label><br>
+    	<input type="hidden" name="login" value="true"></p>
+    	<a href="/login?login=true" class="zocial google">Se connecter</a></center>
+    	</form>
+    	
+		<div id="footer">Par <a href="http://www.guillaumederval.be/" target="_blank">Guillaume Derval</a>, ré-écrit sur Google App Engine par <a href="http://www.cdamman.tk" target="_blank">Corentin Damman</a>, basé sur le code de Ploki<br>
+		Voir le <a href="https://gist.github.com/GuillaumeDerval/6574088" target="_blank">code source PHP</a> ou <a href="http://ucl2ics.appspot.com/source.zip" target="_blank">code source App Engine</a> ! Utiliser <a href="http://ucl2ics.appspot.com/API.pdf" target="_blank">l'API</a></div>
+  	</body>
+</html>

@@ -1,0 +1,74 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{ulem}
+\usepackage{verbatim}
+\usepackage[hidelinks]{hyperref}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\author{Damman Corentin}
+\title{API pour \og UCL ADE to ICS \fg{}}
+\begin{document}
+\maketitle
+
+\section{Utilisation avec URL Shortener}
+
+La récupération du fichier \verb#ics# se fait en 2 étapes. Premièrement, if faut faire une requête à l'adresse suivante:\\
+\url{http://ucl2ics.appspot.com/set?codes=&courses=&weeks=&project=&dh=}\\
+
+Ce serveur renverra une clé d'identification au format \verb#Student(int)#, sous forme de texte (en \verb#text/plain#, sans balises HTML, format UTF-8).
+
+Il suffira alors de faire une seconde requête à:\\
+\url{http://ucl2ics.appspot.com/get?key=}\\
+
+Vous récupérerez un fichier \verb#ade.ics# du serveur contenant les informations liées à cette clé.
+
+\subsection{Arguments}
+\begin{itemize}
+\item \verb#codes#: les codes de l'Université (orientation, majeure, mineure, cours de langue, etc.)
+\item \verb#courses#: les codes des cours à aller chercher dans l'horaire (séparées par virgules, \uline{sans espaces})
+\item \verb#weeks#: les semaines (entre 0 et 51) à récupérer (séparées par virgules, \uline{sans espaces})
+\item \verb#project#: le projet, pour 2013-2014 c'est 16
+\item \verb#dh#: dé-HURLER les cours (0 = non, 1 = oui)\\
+
+\item \verb#key#: clé d'identification renvoyée par \verb#set# et à utiliser pour récupérer l'agenda via \verb#get#
+\end{itemize}
+
+~\\
+\textbf{NOTE IMPORTANTE:} les caractères spéciaux doivent être encodés pour l'URL, comme expliqué ici: \url{http://php.net/manual/fr/function.urlencode.php}
+
+\subsection{Exemple}
+\noindent\url{http://ucl2ics.appspot.com/set?codes=FSA13BA,minelec13,Majmeca13&courses=LELEC1530-1,LELEC1755_2%C3%A8me+moiti%C3%A9+quadri,LELEC1755_1%C3%A8re+moiti%C3%A9+quadri,LMECA1451-1,LMECA1901-1,LFSAB1105-1,LMECA1855-1&weeks=0,1,2,3,4,5,6,7,8,9,10,11,12,13&project=16&dh=1}\\
+
+Renverra un étudiant, par exemple \verb#Student(14008)#. On récupère alors l'agenda via:\\
+
+\noindent\url{http://ucl2ics.appspot.com/get?key=Student(14008)}
+
+\section{Utilisation sans URL Shortener}
+
+Il suffit simplement de faire une requête à l'adresse suivante:\\
+\url{http://ucl2icsphp.appspot.com/ade.php?codes=&courses=&weeks=&project=&dh=}\\
+
+Vous récupérerez un fichier \verb#calendar.ics# du serveur contenant les informations demandées.
+
+\subsection{Arguments}
+\begin{itemize}
+\item \verb#codes#: les codes de l'Université (orientation, majeure, mineure, cours de langue, etc.)
+\item \verb#courses#: les codes des cours à aller chercher dans l'horaire (séparées par virgules, \uline{sans espaces})
+\item \verb#weeks#: les semaines (entre 0 et 51) à récupérer (séparées par virgules, \uline{sans espaces})
+\item \verb#project#: le projet, pour 2013-2014 c'est 16
+\item \verb#dh#: dé-HURLER les cours (0 = non, 1 = oui)
+\end{itemize}
+
+~\\
+\textbf{NOTE IMPORTANTE:} les caractères spéciaux doivent être encodés pour l'URL, comme expliqué ici: \url{http://php.net/manual/fr/function.urlencode.php}
+
+\subsection{Exemple}
+\noindent\url{http://ucl2icsphp.appspot.com/ade.php?codes=FSA13BA,minelec13,Majmeca13&courses=LELEC1530-1,LELEC1755_2%C3%A8me+moiti%C3%A9+quadri,LELEC1755_1%C3%A8re+moiti%C3%A9+quadri,LMECA1451-1,LMECA1901-1,LFSAB1105-1,LMECA1855-1&weeks=0,1,2,3,4,5,6,7,8,9,10,11,12,13&project=16&dh=1}
+
+\end{document}

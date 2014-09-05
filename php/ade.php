@@ -1,0 +1,417 @@
+<?php
+	/*
+		UCL2ICS v6 APP ENGINE EDITION
+		Corentin Damman & Guillaume Derval, basé sur le travail de ploki (forum-epl)
+		- Changement de l'adresse pour ADE v6
+		
+		- Fix general
+		- Remise en forme du code (meme si Nicolas dit que ce n'est pas suffisant ;-) )
+		- Ajout de la possibilite d'enlever des cours
+		- On ne sauvegarde plus rien sur le disque
+		- UTF-8 inside
+		- Lien d'abonnement
+		- Colle les cours dédoublés (voir plus bas)
+		- Emails des formateurs et respect du format iCalendar pour ceux-ci
+		
+		- Changement de cURL par file_get_contents pour App Engine
+		- Changements mineurs d'optimisation & de code html
+		- Correction pour les cours comportant des espaces ou des àéè
+		- Suppression des WARNING
+		- Ajout de la connexion par compte Google
+		- Ajout du preg_replace pour les cours contenant des i -> I
+		- Correction si téléchargement direct (problème avec json)
+		- New funny buttons
+		
+		(NB: merci de ne pas porter attention à la qualité du code, tout ceci à été fait itérativement et de manière presque irréfléchie :D)
+	*/
+	//ini_set('display_errors', false);
+	//error_reporting(E_NONE);
+	
+	function printHeader() {
+		echo 	"<html>" .
+				"	<head>" .
+				"		<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">" .
+				"		<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"http://ucl2icsphp.appspot.com/favicon.ico\">" .
+				"		<link rel=\"stylesheet\" type=\"text/css\" href=\"http://ucl2ics.appspot.com/css/zocial.css\">" .
+				"		<link rel=\"stylesheet\" type=\"text/css\" href=\"http://ucl2icsphp.appspot.com/ade.css\">" .
+				"		<title>UCL ADE to ICS</title>" .
+				"	</head>" .
+				"	<body>" .
+				"		<h1><a href=\"http://ucl2ics.appspot.com\" style=\"text-decoration:none; color:#000;\">UCL ADE to ICS</a> <span id=\"version\">2014-2015 App Engine EDITION (v6)</span></h1>";
+	}
+	
+	function printFooter() {
+		echo 	"		<div id=\"footer\">Par <a href=\"http://www.guillaumederval.be\" target=\"_blank\">Guillaume Derval</a>, ré-écrit sur Google App Engine par <a href=\"http://www.cdamman.tk\" target=\"_blank\">Corentin Damman</a>, basé sur le code de Ploki<br>" .
+				"		Voir le <a href=\"https://gist.github.com/GuillaumeDerval/6574088\" target=\"_blank\">code source PHP</a> ou <a href=\"http://ucl2ics.appspot.com/source.zip\" target=\"_blank\">code source App Engine</a> ! Utiliser <a href=\"http://ucl2ics.appspot.com/API.pdf\" target=\"_blank\">l'API</a></div>" .
+				"	</body>" .
+				"</html>";
+	}
+	
+	function CutDate($date) {
+		$ar = explode("/",$date);
+		return $ar[2].$ar[1].$ar[0];
+	}
+	
+	function CatHeure($heure) {
+		$heures = explode('h',$heure); //0=h,1=min
+		return $heures;
+	}
+	
+	function HFin($debut,$duree) {
+		$duree = str_replace('min','',$duree);
+		$duree_ar = explode('h',$duree);
+		$dureeh = $duree_ar[0]; // comme il y a des cours de la forme 15min, on pourrait donc avoir des minutes dans duree_ar[0]
+		$dureem = (isset($duree_ar[1]))?$duree_ar[1]:$duree_ar[0]; // si on a une duree de la forme 2h , dureem est vide (0 pour une addition)
+	
+		$finm = $debut[1]+$dureem;
+			if(($finm)>=60) {
+			$debut[0]=$debut[0]+1;
+			$finm = $finm-60;
+			}
+		$finm = (strlen($finm)<2)?'0'.$finm:$finm;// on rajoute le 0 si l'heure de fin est 8h09 par exemple
+		$finh = $debut[0]+$dureeh; // on suppose qu'on aura jamais cours aprÃ¨s minuit, et qu'on inclu pas les s*n* dans l'edt ADE...
+		$finh = (strlen($finh)<2)?'0'.$finh:$finh; // la meme que pour les minutes
+		$final = $finh.$finm.'00'; // la forme ics est hhmmss, donc on met ss Ã  00
+		return $final;
+	}
+	
+	/*
+		codes and weeks must be strings (array glued with ,)
+	*/
+	function getCoursesFromCodes($codes,$weeks,$projectID,$dh) {
+		//$url = 'http://horaire.sgsi.ucl.ac.be:8080';
+		$url = 'http://horairev6.uclouvain.be';
+		
+		// OUVERTURE DE SESSION
+		$post_data = "showTab=true&showTabInstructors=true&showImage=true&iE=true&displayConfId=46&display=true&x=&y=&isClickable=true&changeOptions=true&displayType=0&showLoad=false&showTreeCategory2=true&showTabActivity=true&showTabWeek=false&showTabDay=false&showTabStage=false&showTabDate=true&showTabHour=true&showTabDuration=true&aC=true&aTy=false&aUrl=false&aSize=false&aMx=false&aSl=false&aCx=false&aCy=false&aCz=false&aTz=false&aN=false&aNe=false&showTabTrainees=false&sC=false&sTy=false&sUrl=false&sE=false&sM=false&sJ=false&sA1=false&sA2=false&sZp=false&sCi=false&sSt=false&sCt=false&sT=false&sF=false&sCx=false&sCy=false&sCz=false&sTz=false&showTabRooms=true&roC=false&roTy=false&roUrl=false&roE=false&roM=false&roJ=false&roA1=false&roA2=false&roZp=false&roCi=false&roSt=false&roCt=false&roT=false&roF=false&roCx=false&roCy=false&roCz=false&roTz=false&showTabResources=false&reC=false&reTy=false&reUrl=false&reE=false&reM=false&reJ=false&reA1=false&reA2=false&reZp=false&reCi=false&reSt=false&reCt=false&reT=false&reF=false&reCx=false&reCy=false&reCz=false&reTz=false&showTabCategory5=false&c5C=false&c5Ty=false&c5Url=false&c5E=false&c5M=false&c5J=false&c5A1=false&c5A2=false&c5Zp=false&c5Ci=false&c5St=false&c5Ct=false&c5T=false&c5F=false&c5Cx=false&c5Cy=false&c5Cz=false&c5Tz=false&showTabCategory6=false&c6C=false&c6Ty=false&c6Url=false&c6E=false&c6M=false&c6J=false&c6A1=false&c6A2=false&c6Zp=false&c6Ci=false&c6St=false&c6Ct=false&c6T=false&c6F=false&c6Cx=false&c6Cy=false&c6Cz=false&c6Tz=false&showTabCategory7=false&c7C=false&c7Ty=false&c7Url=false&c7E=false&c7M=false&c7J=false&c7A1=false&c7A2=false&c7Zp=false&c7Ci=false&c7St=false&c7Ct=false&c7T=false&c7F=false&c7Cx=false&c7Cy=false&c7Cz=false&c7Tz=false&showTabCategory8=false&c8C=false&c8Ty=false&c8Url=false&c8E=false&c8M=false&c8J=false&c8A1=false&c8A2=false&c8Zp=false&c8Ci=false&c8St=false&c8Ct=false&c8T=false&c8F=false&c8Cx=false&c8Cy=false&c8Cz=false&c8Tz=false";
+		$context =
+			array("http"=>
+			  array(
+				"method" => "post",
+				"content" => $post_data,
+				"header"=>	"User-Agent: Mozilla/5.0" // utf-8
+			  )
+			);
+		$context = stream_context_create($context);
+		//$result = file_get_contents($url.'/ade/custom/modules/plannings/direct_planning.jsp?weeks='.$weeks.'&code='.$codes.'&login=etudiant&password=student&projectId='.$projectID, false, $context);
+		$result = file_get_contents($url.'/jsp/custom/modules/plannings/direct_planning.jsp?keepSelection&weeks='.$weeks.'&code='.$codes.'&login=etudiant&password=student&projectId='.$projectID, false, $context);
+		$cookies=array();
+		foreach($http_response_header as $s) {
+			if(preg_match('|^Set-Cookie:\s*([^=]+)=([^;]+);(.+)$|',$s,$parts))
+				$cookies[$parts[1]]=$parts[2];
+		}
+		
+		$context2 =
+			array("http"=>
+			  array(
+				"method" => "get",
+				"header"=>	'Cookie: JSESSIONID=' . $cookies["JSESSIONID"]."\r\n" .
+							"User-Agent: Mozilla/5.0" // utf-8
+			  )
+			);
+		$context2 = stream_context_create($context2);
+		
+		// CHARGEMENT DE LA SESSION ET AFFICHAGE EN TABLEAU
+		//$horaire = file_get_contents($url.'/ade/custom/modules/plannings/info.jsp?order=slot', false, $context2);
+		$horaire = file_get_contents($url.'/jsp/custom/modules/plannings/info.jsp?order=slot', false, $context2);
+		
+		// TRAITEMENT DE L'HORAIRE
+		$horaire = str_replace('<BODY>','',$horaire);
+		$horaire = str_replace('&amp;','&',$horaire);
+		$horaire = str_replace('&','&amp;',$horaire);
+		
+		$dom = new DOMDocument(); // creation d'un objet DOM pour lire le html 
+		$dom->loadHTML($horaire) or die('erreur');
+		$lignes = $dom->getElementsByTagName('tr'); // on recupere toute les lignes
+		
+		$result = array();
+		$cours = array();
+		$i=0;
+		foreach ($lignes as $ligne) {
+			if($i>1) {
+				// les deux premiers tr sont des titres, osef
+				$content = $ligne->childNodes;
+				
+				$noms = array('date','mat','heure','duree','nom','prof','profmail','salle');
+				$entree = array();
+				foreach($noms as $nomid => $nom) {
+					$entree[$nom] = $content->item($nomid)->nodeValue; // attribution des valeurs aux variables
+				}
+				if($dh)
+					$entree['nom'] = ucfirst(mb_strtolower($entree['nom'], 'UTF-8'));
+					$entree['nom'] = preg_replace_callback('/ (i+)( ?)/', function ($m) {
+					return " " . strtoupper($m[1]) . "$m[2]";
+				}, $entree['nom']);
+				$result[] = $entree;
+				$cours[$entree['mat']] = $entree['nom'];
+			}
+			$i++;
+		}
+		
+		// Colle les cours dedoubles (Ex: cours d'anglais le lundi 23/09 de 08h30 à 9h30 et de 9h30 à 10h30, dans le meme local, avec le meme formateur)
+		for($i = 0; $i < count($result); $i++) {
+			for($j = $i+1; $j < count($result); $j++) {
+				if($result[$i]['date'] == $result[$j]['date'] && 
+					$result[$i]['mat'] == $result[$j]['mat'] && 
+					$result[$i]['salle'] == $result[$j]['salle'] &&
+					$result[$i]['prof'] == $result[$j]['prof'] &&
+					$result[$i]['nom'] == $result[$j]['nom'])
+				{
+					$heuressI = CatHeure($result[$i]['heure']);
+					$heureDebutI = $heuressI[0].$heuressI[1]."00";
+					$heureFinI = HFin($heuressI,$result[$i]['duree']); //hhmmss
+					
+					$heuressJ = CatHeure($result[$j]['heure']);
+					$heureDebutJ = $heuressJ[0].$heuressJ[1]."00";
+					$heureFinJ = HFin($heuressJ,$result[$j]['duree']); //hhmmss
+					
+					$dureeI = explode('h',str_replace('min','',$result[$i]['duree']));
+					$dureeJ = explode('h',str_replace('min','',$result[$j]['duree']));
+					$nduree = $dureeI[0]*60+$dureeJ[0]*60;
+					if(isset($dureeI[1])) $nduree+=$dureeI[1];
+					if(isset($dureeJ[1])) $nduree+=$dureeJ[1];
+					$nduree = "".floor($nduree/60)."h".($nduree%60)."min";
+					
+					if($heureDebutI == $heureFinJ)
+					{
+						$result[$i]['heure'] = $result[$j]['heure'];
+						$result[$i]['duree'] = $nduree;
+						unset($result[$j]);
+						$result = array_values($result);
+					}
+					else if($heureDebutJ == $heureFinI)
+					{
+						$result[$i]['duree'] = $nduree;
+						unset($result[$j]);
+						$result = array_values($result);
+					}
+				}
+			}
+		}
+		
+		return array($cours, $result);/**/
+	}
+	
+	function makeICS($horaire, $cours) {
+		$buf_ics = "BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//ETSIL 3//iCal 1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VTIMEZONE
+TZID:Bruxelles\, Copenhague\, Madrid\, Paris
+BEGIN:STANDARD
+DTSTART:20001029T030000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:Paris\, Madrid
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:20000326T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+TZNAME:Paris\, Madrid
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+END:DAYLIGHT
+END:VTIMEZONE\n";
+		
+		// EXTRACTION DES DONNEES DU DOMDOCUMENT
+		$stamp_id = rand(10,59);
+		foreach ($horaire as $entree) {
+			if(!in_array($entree['mat'], $cours))
+				continue;
+				
+			$heuress = CatHeure($entree['heure']); // tableau avec heure en 0 et minute en 1
+			$hfin = HFin($heuress,$entree['duree']); // hhmmss
+			$date = CutDate($entree['date']); // aaaammjj
+			$salle = $entree['salle'];
+			$coursN=$entree['nom'];
+			$buf_ics .= "BEGIN:VEVENT\n";
+			$description = $entree['mat'];
+			$description .= "\n";
+			$buf_ics .= "DESCRIPTION:".$description;
+			if($entree['prof'] != "") {
+				$buf_ics .= "ORGANIZER;CN=".$entree['prof'].":MAILTO:";
+				if($entree['profmail'] != "")
+					$buf_ics .= str_replace(' ', ',', trim($entree['profmail']));
+				else
+					$buf_ics .= "no@email.be";
+				$buf_ics .= "\n";
+			}
+			$buf_ics .= "DTSTAMP:20100130T1200".$stamp_id."Z\n";
+			$buf_ics .= 'DTSTART;TZID="Bruxelles, Copenhague, Madrid, Paris":'.$date.'T'.$heuress[0].$heuress[1]."00\n";
+			$buf_ics .= 'DTEND;TZID="Bruxelles, Copenhague, Madrid, Paris":'.$date.'T'.$hfin."\n";
+			$buf_ics .= 'LOCATION:'.$salle."\n";
+			$buf_ics .= "SUMMARY:".$coursN."\nEND:VEVENT\n";	
+		};
+		$buf_ics .= "END:VCALENDAR";
+		return $buf_ics;
+	}
+	
+	
+	if(!isset($_POST['horaire']) && !(isset($_GET['codes']) && isset($_GET['courses']) && isset($_GET['weeks']) && isset($_GET['project'])))
+	{
+		//Nicolas, c'est rien que pour toi.
+		printHeader();
+		
+		if (isset($_POST['codes']) && $_POST['codes']!='') {
+			// PARAMETRES -------------------------------------------------------------------------------------------------------------
+			$codes = str_replace(", ",",",$_POST['codes']);
+			if(strpos($codes, 'http') !== false) {
+				$t = explode('&', $codes);
+				foreach($t as $v) {
+					$t2 = explode('=', $v);
+					if(count($t2) == 2 && $t2[0] == 'code') {
+						$codes = $t2[1];
+						break;
+					}
+				}
+			}
+			$semaines = str_replace(", ",",",$_POST['semaines']);
+			$projectID = isset($_POST['projet']) ? (int)$_POST['projet'] : 16;
+			$dh = isset($_POST['deshurler']);
+			$email = $_POST['email'];
+			// -----------------------------------------------------------------------------------------------------------------------------
+			$t = getCoursesFromCodes($codes,$semaines,$projectID,$dh);
+			$cours = $t[0];
+			$result = $t[1];
+			
+			//exclure les cours inutiles
+			?>
+			<form class="top" id="formulaire" method="post" action="ade.php">
+				<center><p>Choisissez les <b>cours à inclure</b></p></center>
+				<input type="hidden" name="horaire" value="<?php echo htmlspecialchars(json_encode($result), ENT_COMPAT, "UTF-8");?>"/>
+				<input type="hidden" name="codes" value="<?php echo htmlspecialchars($codes, ENT_COMPAT, "UTF-8"); ?>"/>
+				<input type="hidden" name="semaines" value="<?php echo htmlspecialchars($semaines, ENT_COMPAT, "UTF-8"); ?>"/>
+				<input type="hidden" name="projet" value="<?php echo htmlspecialchars($projectID, ENT_COMPAT, "UTF-8"); ?>"/>
+				<input type="hidden" name="email" value="<?php echo htmlspecialchars($email, ENT_COMPAT, "UTF-8"); ?>"/>
+				<input type="hidden" name="dh" value="<?php echo (isset($_POST['deshurler']) ? '1':'0'); ?>"/>
+				<table>
+				<?php
+					asort($cours);
+					foreach($cours as $mat => $nom) {
+						$mat = htmlspecialchars($mat, ENT_COMPAT, "UTF-8");
+						$nom = htmlspecialchars($nom, ENT_COMPAT, "UTF-8");
+						$checked = "";
+						if(isset($_POST['checkedCourses'])) {
+							$checkedCourses = str_replace(", ",",",html_entity_decode($_POST['checkedCourses'], ENT_COMPAT, "UTF-8"));
+							$checkedCourses = explode(",",$checkedCourses);
+			
+							foreach($checkedCourses as $c) { if(strcmp($c, $mat) == 0) $checked = " checked"; }
+						} else {
+							$checked = " checked";
+						}
+						echo "<tr><td><input type=\"checkbox\" name=\"cours[]\" value=\"$mat\" id=\"cours$mat\"".$checked."/></td><td><label for=\"cours$mat\">$mat</label></td><td><label for=\"cours$mat\">$nom</label></td></tr>";
+					}
+				?>
+				</table>
+				<input type="submit" name="getlink" id="getlink" class="zocial secondary" value="Recevoir le lien d'abonnement !"/> ou <input type="submit" name="getfile" id="getfile" class="zocial secondary" value="Télécharger uniquement le fichier ICS">
+			</form>
+		
+		<?php } else { ?>
+		
+			<form class="top" id="formulaire" method="post" action="ade.php">
+				<?php
+				$semaines='';
+				if(isset($_POST['semaines']))
+					$semaines = htmlentities($_POST['semaines']);
+				else {
+					for ($i = 0; $i < 35; $i++)
+						$semaines .= ','.$i;
+					$semaines = ltrim($semaines,','); //supprime la premiere virgule
+				}
+				$codes = 'FSA13BA,minelec13,Majmeca13';
+				if(isset($_POST['codes']))
+					$codes = htmlentities($_POST['codes']);
+				$projet = 6;
+				if(isset($_POST['projet']))
+					$projet = (int)$_POST['projet'];
+				?>
+				<center><p><label for="codes"><b>Codes cours</b> (séparés par virgules) ou <b>lien ADE</b> (donné par <a href="https://www.uclouvain.be/horaires-epl.html" target="_blank">l'outil horaire de l'EPL</a> ou celui de votre FAC): </label><br/>
+				<input type="text" name="codes" id="codes" size="130" value="<?php echo $codes;?>"/></p>
+				<p><label for="semaines"><b>Semaines</b> désirées (séparées par virgules): </label><br/>
+				<input type="text" name="semaines" id="semaines" value="<?php echo $semaines; ?>" size="130"/><br/>
+				<input type="button" value="Sélectionner le 1er quadrimestre" onClick="this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13'">
+				<input type="button" value="Sélectionner le 2ème quadrimestre" onClick="this.form.semaines.value='19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34'">
+				<input type="button" value="Sélectionner cette semaine" onClick="this.form.semaines.value='<?php echo (date("W")+14)%51; ?>'">
+				<input type="button" value="Sélectionner toutes les semaines" onClick="this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51'"><br/>
+				Nous sommes en S<?php echo (date("W")+14)%51; ?>. La premiere semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19<br/>
+				<p><label for="projet"><b>ID</b> du projet (pour 2014-2015, c'est 6): </label>
+				<input type="text" name="projet" id="projet" value="<?php echo $projet; ?>"/></p>
+				<p><input type="checkbox" name="deshurler" id="deshurler" checked="checked"/><label for="deshurler"><b>dé-HURLER</b> le nom des cours</label></p>
+				<input type="hidden" name="email" id="email" value="null"/>
+				<input type="submit" class="zocial secondary" value="Lancer" /></center>
+			</form>
+			<?php }
+		printFooter();
+	} else if(isset($_POST['horaire']) && !isset($_POST['getlink'])) {
+		$horaire = json_decode(htmlspecialchars_decode($_POST['horaire'], ENT_COMPAT), true);
+		header('Content-type: text/calendar; charset=utf-8');
+		header('Content-Disposition: inline; filename=calendar.ics');
+		echo makeICS($horaire, $_POST['cours']);
+	} else if(isset($_POST['horaire']) && isset($_POST['getlink'])) {
+		$cours = $_POST['cours'];
+		foreach($cours as $key => $val)
+			$cours[$key] = urlencode($val);
+			//$cours[$key] = preg_replace('#[^A-Za-z0-9_\-]#isU', '', $val);
+		$cours = array_unique($cours);
+		$cours = implode(',', $cours);
+		
+		$codes = explode(',', $_POST['codes']);
+		foreach($codes as $key => $val)
+			$codes[$key] = urlencode($val);
+			//$codes[$key] = preg_replace('#[^A-Za-z0-9_\-]#isU', '', $val);
+		$codes = implode(',', $codes);
+		
+		$weeks = explode(',', $_POST['semaines']);
+		foreach($weeks as $key => $val)
+			$weeks[$key] = preg_replace('#[^0-9]#isU', '', $val);
+		$weeks = implode(',', $weeks);
+		
+		$email = $_POST['email'];
+		
+		$keyLink = file_get_contents("http://ucl2ics.appspot.com/set?codes=".$codes."&courses=".$cours."&weeks=".$weeks."&project=".(int)$_POST['projet']."&dh=".(isset($_POST['dh']) ? '1':'0')."&email=".$email, false, NULL);
+		//echo "http://ucl2ics.appspot.com/set?codes=".$codes."&courses=".$cours."&weeks=".$weeks."&project=".(int)$_POST['projet']."&dh=".(isset($_POST['dh']) ? '1':'0');
+		$link = "http://ucl2ics.appspot.com/get?key=".$keyLink;
+		
+		printHeader(); ?>
+			<div class="likeform">
+				<center><p>Le <b>lien d'abonnement</b> est <br/>
+				<div class="monospace">
+					<a href="<?php echo htmlspecialchars($link, ENT_COMPAT, "UTF-8");?>" target="_blank"><?php echo htmlspecialchars($link, ENT_COMPAT, "UTF-8");?></a>
+				</div></p>
+				<p>Vous pouvez l'utiliser pour une <b>mise à jour automatique</b> de vos calendriers!<br/>
+				Sous <b>Apple iCal</b>, faites &laquo; Fichier &raquo; &#8658; &laquo; Nouvel Abonnement Calendar &raquo;.<br/>
+				Sur <b>Google Agenda</b>, faites &laquo; Autres agenda &raquo; &#8658; appuyez sur la petite flèche &#8658; &laquo; Ajouter par URL &raquo;.<br/>
+				<br/>
+				De cette manière, si un cours apparait ou disparait de ADE, la même action se déroulera sur votre calendrier ;-)<br/>
+				Vous pouvez également directement cliquer sur le lien pour <b>télécharger le fichier ICS</b>.</p></center>
+			</div>
+		<?php printFooter();
+	} else if(isset($_GET['codes']) && isset($_GET['courses']) && isset($_GET['weeks']) && isset($_GET['project'])) {
+		$courses = explode(',',$_GET['courses']);
+		foreach($courses as $key => $val)
+			$courses[$key] = urldecode($val);
+			//$courses[$key] = preg_replace('#[^A-Za-z0-9_\-]#isU', '', $val);
+		
+		$codes = explode(',',$_GET['codes']);
+		foreach($codes as $key => $val)
+			$codes[$key] = urldecode($val);
+			//$codes[$key] = preg_replace('#[^A-Za-z0-9_\-]#isU', '', $val);
+		$codes = implode(',', $codes);
+		
+		$weeks = explode(',',$_GET['weeks']);
+		foreach($weeks as $key => $val)
+			$weeks[$key] = preg_replace('#[^0-9]#isU', '', $val);
+		$weeks = implode(',', $weeks);
+		
+		$project = (int)$_GET['project'];
+		
+		$t = getCoursesFromCodes($codes,$weeks,$project,isset($_GET['dh']) && $_GET['dh'] == 1);
+		$horaire = $t[1];
+		header('Content-type: text/calendar; charset=utf-8');
+		header('Content-Disposition: inline; filename=calendar.ics');
+		echo makeICS($horaire, $courses);
+	}
+?>

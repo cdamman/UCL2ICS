@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+	<application>ucl2ics</application>
+	<version>6</version>
+	<threadsafe>true</threadsafe>
+	<static-files>
+	    <include path="/favicon.ico"/>
+	    <include path="/API.pdf"/>
+	    <include path="/source.zip"/>
+	    <include path="/css/*"/>
+	</static-files>
+	
+	<!-- Configure java.util.logging -->
+	<system-properties>
+		<property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+	</system-properties>
+	
+</appengine-web-app>

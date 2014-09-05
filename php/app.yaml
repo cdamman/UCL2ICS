@@ -1,0 +1,15 @@
+application: ucl2icsphp
+version: 6
+runtime: php
+api_version: 1
+
+handlers:
+- url: /(.*\.(css|ico|html))
+  static_files: \1
+  upload: (.*\.(css|ico|html))
+  
+- url: /admin
+  script: admin.php
+  
+- url: /.*
+  script: ade.php
