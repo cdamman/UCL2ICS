@@ -45,7 +45,7 @@ public final class PMF {
 	}
 	
 	public static String footer() {
-		return 	"		<div id=\"footer\">Ré-écrit sur Google App Engine par <a href=\"http://www.cdamman.tk\" target=\"_blank\">Corentin Damman</a>, basé sur le code de Ploki<br>" +
+		return 	"		<div id=\"footer\">Ré-écrit sur Google App Engine par <a href=\"http://dammanco.appspot.com\" target=\"_blank\">Corentin Damman</a>, basé sur le code de Ploki<br>" +
 				"		Voir le <a href=\"https://github.com/cdamman/UCL2ICS\" target=\"_blank\">code source App Engine</a> ! Utiliser <a href=\"http://ucl2ics.appspot.com/API.pdf\" target=\"_blank\">l'API</a></div>" +
 				"	</body>" +
 				"</html>";
