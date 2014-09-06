@@ -72,7 +72,7 @@ public final class PMF {
 	}
 	
 	public static String beginFormAlert(String codes, String semaines, int projectID, String email) {
-		return 	"<form class=\"top\" id=\"formulaire\" onsubmit=\"return valider(this)\" method=\"post\" action=\"http://ucl2icsphp.appspot.com/ade.php\">" +
+		return 	"<form class=\"top\" id=\"formulaire\" onsubmit=\"return (valider(this) && confirm('Etes vous sur de vouloir continuer sans vous connecter ?\\nVotre horaire ICS ne sera alors plus modifiable dans le futur.\\nSi vous souhaitez vous connectez, appuyez sur Annuler et puis cliquez sur Se connecter en haut à droite.\\nPour continuer sans vous connecter, appuyez sur OK'))\" method=\"post\" action=\"http://ucl2icsphp.appspot.com/ade.php\">" +
 				"<center><p><label for=\"codes\"><b>Codes cours</b> (séparés par virgules) ou <b>lien ADE</b> (donné par <a href=\"https://www.uclouvain.be/horaires-epl.html\" target=\"_blank\">l'outil horaire de l'EPL</a> ou celui de votre FAC): </label><br/>" +
 				"<input type=\"text\" name=\"codes\" id=\"codes\" size=\"130\" value=\"" + codes + "\"/></p>" + 
 				"<p><label for=\"semaines\"><b>Semaines</b> désirées (séparées par virgules): </label><br/>" + 
@@ -87,7 +87,7 @@ public final class PMF {
 				"<p><input type=\"checkbox\" name=\"dh\" id=\"dh\" checked=\"checked\"/><label for=\"dh\"><b>dé-HURLER</b> le nom des cours</label><br>" +
 				"<input type=\"checkbox\" name=\"TPorCM\" id=\"TPorCM\" checked=\"checked\"/><label for=\"TPorCM\">Afficher s'il s'agit <b>d'un TP ou d'un CM</b></label></p>" + 
 				"<input type=\"hidden\" name=\"email\" id=\"email\" value=\"" + email + "\"/>" + 
-				"<input type=\"submit\" class=\"zocial secondary\" value=\"Lancer\"  onclick=\"return confirm('Etes vous sur de vouloir continuer sans vous connecter ?\\nVotre horaire ICS ne sera alors plus modifiable dans le futur.\\nSi vous souhaitez vous connectez, appuyez sur Annuler et puis cliquez sur Se connecter en haut à droite.\\nPour continuer sans vous connecter, appuyez sur OK');\"/></center>" + 
+				"<input type=\"submit\" class=\"zocial secondary\" value=\"Lancer\"/></center>" + 
 				"</form>";
 	}
 	
