@@ -38,7 +38,7 @@ public class Admin extends HttpServlet {
 					"<title>Admin</title><style>td { width:80px; max-width:200px; } tr:nth-child(even) {background: #CCC} tr:nth-child(odd) {background: #FFF} </style>" +
 					"</head><body><div style=\"float: left;\"><font size=\"6\" face=\"Comic Sans MS\">Admin</font></div><div style=\"float: right;\"><a href=\"" + 
 					userService.createLogoutURL(req.getRequestURI()) + "\">Log Out</a></div>  <br><br><center><h4>Available Students :</h4></center>" + 
-					"  <table border=\"1\" align=\"center\"><tr><th>&nbsp;Key&nbsp;</th><th width=20%>&nbsp;Codes&nbsp;</th><th width=40%>&nbsp;Courses&nbsp;</th><th width=20%>&nbsp;Semaines&nbsp;</th><th>&nbsp;Projet&nbsp;</th><th>&nbsp;STFU&nbsp;</th><th>&nbsp;Count&nbsp;</th><th>&nbsp;Email&nbsp;</th><th>&nbsp;Outils&nbsp;</th></tr>");
+					"  <table border=\"1\" align=\"center\"><tr><th>&nbsp;Key&nbsp;</th><th width=20%>&nbsp;Codes&nbsp;</th><th width=40%>&nbsp;Courses&nbsp;</th><th width=20%>&nbsp;Semaines&nbsp;</th><th>&nbsp;Projet&nbsp;<br>&nbsp;STFU&nbsp;<br>&nbsp;TPorCM&nbsp;</th><th>&nbsp;Count&nbsp;<br>&nbsp;Email&nbsp;</th><th>&nbsp;Outils&nbsp;</th></tr>");
 
 				Counter counter;
 				try {
@@ -62,7 +62,7 @@ public class Admin extends HttpServlet {
 								resp.getWriter().println("    <tr>      " + e.getAll() + "    </tr>");
 							}
 						} else {
-							resp.getWriter().println("    <tr>      <td>No clients</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>    </tr>");
+							resp.getWriter().println("    <tr>      <td>No clients</td><td></td><td></td><td></td><td></td><td></td><td></td>    </tr>");
 						}
 					} finally {
 						query.closeAll();

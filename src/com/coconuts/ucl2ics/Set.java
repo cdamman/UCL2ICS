@@ -31,6 +31,7 @@ public class Set extends HttpServlet {
 		String semaines = req.getParameter("weeks");
 		String projectIDString = req.getParameter("project");
 		String STFUString = req.getParameter("dh");
+		String TPorCMString = req.getParameter("TPorCM");
 		String email = req.getParameter("email");
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -53,10 +54,11 @@ public class Set extends HttpServlet {
                 			e.setSemaines(semaines);
                 			e.setProjectID(Integer.valueOf(projectIDString));
                 			e.setSTFU(BoolValueOf(STFUString));
+                			e.setSTFU(BoolValueOf(TPorCMString));
             				resp.getWriter().println(e.getKey());
 					    }
 					} else {
-						StudentAgenda e = new StudentAgenda(pm.getObjectById(Counter.class, "Counter").getNextKey(), codes, courses, semaines, Integer.valueOf(projectIDString), BoolValueOf(STFUString), email);
+						StudentAgenda e = new StudentAgenda(pm.getObjectById(Counter.class, "Counter").getNextKey(), codes, courses, semaines, Integer.valueOf(projectIDString), BoolValueOf(STFUString), BoolValueOf(TPorCMString), email);
 						pm.makePersistent(e);
 						resp.getWriter().println(e.getKey());
 					}

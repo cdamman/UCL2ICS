@@ -4,9 +4,9 @@ runtime: php
 api_version: 1
 
 handlers:
-- url: /(.*\.(css|ico|html))
+- url: /(.*\.(css|ico|html|js))
   static_files: \1
-  upload: (.*\.(css|ico|html))
+  upload: (.*\.(css|ico|html|js))
   
 - url: /admin
   script: admin.php

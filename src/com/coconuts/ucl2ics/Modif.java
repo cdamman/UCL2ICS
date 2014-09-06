@@ -67,15 +67,17 @@ public class Modif extends HttpServlet {
 								String semaines = req.getParameter("semaines");
 								String projectIDString = req.getParameter("projectID");
 								String STFUString = req.getParameter("STFU");
+								String TPorCMString = req.getParameter("TPorCM");
 								String counter = req.getParameter("counter");
 								String email = req.getParameter("email");
 								
-								if ((courses == null) || (codes == null) || (semaines == null) || (projectIDString == null) || (STFUString == null) || (counter == null)) {
+								if ((courses == null) || (codes == null) || (semaines == null) || (projectIDString == null) || (STFUString == null)  || (TPorCMString == null) || (counter == null)) {
 									Text codesOld = new Text("");
 									Text coursesOld = new Text("");
 									String semainesOld = "";
 									String projectIDOld = "";
 									String STFUOld = "";
+									String TPorCMOld = "";
 									String counterOld = "";
 									String emailOld = "";
 									
@@ -93,6 +95,7 @@ public class Modif extends HttpServlet {
 												semainesOld = e.getSemaines();
 												projectIDOld = String.valueOf(e.getProjectID());
 												STFUOld = String.valueOf(e.getSTFU());
+												TPorCMOld = String.valueOf(e.getTPorCM());
 												counterOld = String.valueOf(e.getCounter());
 												emailOld = e.getEmail();
 											} else resp.getWriter().println("No results<br>");
@@ -107,12 +110,13 @@ public class Modif extends HttpServlet {
 									"<TR><TD>&nbsp;Semaines&nbsp;</TD><TD><INPUT type=text name=\"semaines\" value=\"" + semainesOld+ "\" size=100></TD></TR>" + 
 									"<TR><TD>&nbsp;ProjectID&nbsp;</TD><TD><INPUT type=text name=\"projectID\" value=\"" + projectIDOld + "\" size=40></TD></TR>" + 
 									"<TR><TD>&nbsp;STFU ?&nbsp;</TD><TD><INPUT type=text name=\"STFU\" value=\"" + STFUOld + "\" size=40></TD></TR>" + 
+									"<TR><TD>&nbsp;STFU ?&nbsp;</TD><TD><INPUT type=text name=\"TPorCM\" value=\"" + TPorCMOld + "\" size=40></TD></TR>" + 
 									"<TR><TD>&nbsp;Counter&nbsp;</TD><TD><INPUT type=text name=\"counter\" value=\"" + counterOld + "\" size=40></TD></TR>" + 
 									"<TR><TD>&nbsp;Email&nbsp;</TD><TD><INPUT type=text name=\"email\" value=\"" + emailOld + "\" size=40></TD></TR>" + 
 									"<TR><TD COLSPAN=2><INPUT type=\"submit\" value=\"Envoyer\"></TD></TR>" + 
 									"</TABLE></FORM>";
 									resp.getWriter().println(page);
-								} else if ((codes.isEmpty()) || (courses.isEmpty()) || (semaines.isEmpty()) || (projectIDString.isEmpty()) || (STFUString.isEmpty()) || (counter.isEmpty())) {
+								} else if ((codes.isEmpty()) || (courses.isEmpty()) || (semaines.isEmpty()) || (projectIDString.isEmpty()) || (STFUString.isEmpty())  || (TPorCMString.isEmpty()) || (counter.isEmpty())) {
 									resp.getWriter().println("Error empty<br>");
 								} else {
 									Query query2 = pm.newQuery(StudentAgenda.class);
@@ -129,6 +133,7 @@ public class Modif extends HttpServlet {
 												e2.setSemaines(PMF.unsplitVirgule(semaines));
 												e2.setProjectID(Integer.valueOf(projectIDString));
 												e2.setSTFU(Integer.valueOf(STFUString));
+												e2.setTPorCM(Integer.valueOf(TPorCMString));
 												e2.setCounter(Integer.valueOf(counter));
 												e2.setEmail(email);
 												resp.getWriter().println("Student "+key+" modified !<br><meta http-equiv=\"Refresh\" content=\"1;URL=admin\">");

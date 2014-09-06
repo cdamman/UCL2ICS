@@ -34,18 +34,22 @@ public class StudentAgenda {
 	private int STFU;
 	 
 	@Persistent
+	private int TPorCM;
+	 
+	@Persistent
 	private long counter;
 	
 	@Persistent
 	private String email;
 	 
-	public StudentAgenda(Long key, Text codes, Text courses, String semaines, int projectID, int STFU, String email) {
+	public StudentAgenda(Long key, Text codes, Text courses, String semaines, int projectID, int STFU, int TPorCM, String email) {
 		this.key = key;
 		this.codes = codes;
 		this.courses = courses;
 		this.semaines = semaines;
 		this.projectID = projectID;
 		this.STFU = STFU;
+		this.TPorCM = TPorCM;
 		this.counter = 0;
 		this.email = email;
 	}
@@ -93,6 +97,14 @@ public class StudentAgenda {
 	public int getSTFU() {
 		return STFU;
 	}
+	 
+	public void setTPorCM(int TPorCM) {
+		this.TPorCM = TPorCM;
+	}
+	 
+	public int getTPorCM() {
+		return TPorCM;
+	}
 	
 	public String getEmail() {
 	    return email;
@@ -103,14 +115,16 @@ public class StudentAgenda {
 	}
  
 	public String getAll() {
-		return 	"<td>&nbsp;" + key + "&nbsp;</td>" + 
+		return 	"<td><center>&nbsp;<b>" + key + "</b>&nbsp;</center></td>" + 
 				"<td><center>&nbsp;" + codes.getValue().replaceAll(",", ", ") + "&nbsp;</center></td>" + 
 				"<td><center>&nbsp;" + courses.getValue().replaceAll(",", ", ") + "&nbsp;</center></td>" + 
 				"<td><center>&nbsp;" + semaines.replaceAll(",", ", ") + "&nbsp;</center></td>" + 
-				"<td><center>&nbsp;" + String.valueOf(projectID) + "&nbsp;</center></td>" + 
-				"<td><center>&nbsp;" + String.valueOf(STFU) + "&nbsp;</center></td>" + 
-				"<td><center>&nbsp;" + String.valueOf(counter) + "&nbsp;</center></td>" + 
-				"<td><center>&nbsp;" + email + "&nbsp;</center></td>" + 
+				"<td><center>&nbsp;" + String.valueOf(projectID) + "&nbsp;<br>" + 
+							"&nbsp;" + OnValueOf(STFU) + "&nbsp;<br>" + 
+							"&nbsp;" + OnValueOf(TPorCM) + "&nbsp;</center></td>" + 
+				"<td><center>&nbsp;" + String.valueOf(counter) + "&nbsp;<br>" +
+							"&nbsp;" + email + "&nbsp;<br>" + 
+							"&nbsp;&nbsp;</center></td>" + 
 				"<td><center>&nbsp;<a href=\"get?key=" + key + "\" target=\"_blank\">Agenda</a>&nbsp;<br>" +
 							"&nbsp;<a href=\"modif?key=" + key + "\">Modifier</a>&nbsp;<br>" +
 							"&nbsp;<a href=\"del?key=" + key + "\">Supprimer</a>&nbsp;</center></td>";
@@ -126,5 +140,9 @@ public class StudentAgenda {
 	
 	public long getCounter() {
 		return counter;
+	}
+	
+	private String OnValueOf(int bool) {
+		return (bool==1) ? "On" : "Off";
 	}
 }

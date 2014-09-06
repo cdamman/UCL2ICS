@@ -50,7 +50,7 @@ public class Get extends HttpServlet {
 									resp.setHeader("Content-Disposition", "inline; filename=ade.ics");
 									try {
 										resp.sendRedirect("http://ucl2icsphp.appspot.com/ade.php?codes="+URLEncoder.encode(e.getCodes().getValue(), "UTF-8")+
-											"&courses="+URLEncoder.encode(e.getCourses().getValue(), "UTF-8")+"&weeks="+e.getSemaines()+"&project="+e.getProjectID()+"&dh="+e.getSTFU());
+											"&courses="+URLEncoder.encode(e.getCourses().getValue(), "UTF-8")+"&weeks="+e.getSemaines()+"&project="+e.getProjectID()+"&dh="+e.getSTFU()+"&TPorCM="+e.getTPorCM());
 							        } catch (IOException ioe) {
 										resp.setContentType("text/html");
 										resp.getWriter().println("Error while getting agenda !<br>"+ioe.getMessage());

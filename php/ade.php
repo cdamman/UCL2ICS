@@ -34,6 +34,7 @@
 				"		<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"http://ucl2icsphp.appspot.com/favicon.ico\">" .
 				"		<link rel=\"stylesheet\" type=\"text/css\" href=\"http://ucl2ics.appspot.com/css/zocial.css\">" .
 				"		<link rel=\"stylesheet\" type=\"text/css\" href=\"http://ucl2icsphp.appspot.com/ade.css\">" .
+				"		<script type=\"text/javascript\" src=\"http://ucl2icsphp.appspot.com/form.js\"></script>" .
 				"		<title>UCL ADE to ICS</title>" .
 				"	</head>" .
 				"	<body>" .
@@ -69,7 +70,7 @@
 			$finm = $finm-60;
 			}
 		$finm = (strlen($finm)<2)?'0'.$finm:$finm;// on rajoute le 0 si l'heure de fin est 8h09 par exemple
-		$finh = $debut[0]+$dureeh; // on suppose qu'on aura jamais cours aprÃ¨s minuit, et qu'on inclu pas les s*n* dans l'edt ADE...
+		$finh = $debut[0]+$dureeh; // on suppose qu'on aura jamais cours apres minuit, et qu'on inclu pas les s*n* dans l'edt ADE...
 		$finh = (strlen($finh)<2)?'0'.$finh:$finh; // la meme que pour les minutes
 		$final = $finh.$finm.'00'; // la forme ics est hhmmss, donc on met ss Ã  00
 		return $final;
@@ -78,7 +79,7 @@
 	/*
 		codes and weeks must be strings (array glued with ,)
 	*/
-	function getCoursesFromCodes($codes,$weeks,$projectID,$dh) {
+	function getCoursesFromCodes($codes,$weeks,$projectID,$dh,$TPorCM) {
 		//$url = 'http://horaire.sgsi.ucl.ac.be:8080';
 		$url = 'http://horairev6.uclouvain.be';
 		
@@ -139,9 +140,15 @@
 				}
 				if($dh)
 					$entree['nom'] = ucfirst(mb_strtolower($entree['nom'], 'UTF-8'));
-					$entree['nom'] = preg_replace_callback('/ (i+)( ?)/', function ($m) {
+				$entree['nom'] = preg_replace_callback('/ (i+)( ?)/', function ($m) {
 					return " " . strtoupper($m[1]) . "$m[2]";
 				}, $entree['nom']);
+				if($TPorCM) {
+					if(substr($entree['mat'],-2,-1) == "_")
+						$entree['nom'] = $entree['nom'].' (TP)';
+					else if(substr($entree['mat'],-2,-1) == "-")
+						$entree['nom'] = $entree['nom'].' (CM)';
+				}
 				$result[] = $entree;
 				$cours[$entree['mat']] = $entree['nom'];
 			}
@@ -270,48 +277,61 @@ END:VTIMEZONE\n";
 			}
 			$semaines = str_replace(", ",",",$_POST['semaines']);
 			$projectID = isset($_POST['projet']) ? (int)$_POST['projet'] : 16;
-			$dh = isset($_POST['deshurler']);
+			$dh = isset($_POST['dh']);
+			$TPorCM = isset($_POST['TPorCM']);
 			$email = $_POST['email'];
 			// -----------------------------------------------------------------------------------------------------------------------------
-			$t = getCoursesFromCodes($codes,$semaines,$projectID,$dh);
+			$t = getCoursesFromCodes($codes,$semaines,$projectID,$dh,$TPorCM);
 			$cours = $t[0];
 			$result = $t[1];
 			
 			//exclure les cours inutiles
-			?>
-			<form class="top" id="formulaire" method="post" action="ade.php">
-				<center><p>Choisissez les <b>cours à inclure</b></p></center>
-				<input type="hidden" name="horaire" value="<?php echo htmlspecialchars(json_encode($result), ENT_COMPAT, "UTF-8");?>"/>
-				<input type="hidden" name="codes" value="<?php echo htmlspecialchars($codes, ENT_COMPAT, "UTF-8"); ?>"/>
-				<input type="hidden" name="semaines" value="<?php echo htmlspecialchars($semaines, ENT_COMPAT, "UTF-8"); ?>"/>
-				<input type="hidden" name="projet" value="<?php echo htmlspecialchars($projectID, ENT_COMPAT, "UTF-8"); ?>"/>
-				<input type="hidden" name="email" value="<?php echo htmlspecialchars($email, ENT_COMPAT, "UTF-8"); ?>"/>
-				<input type="hidden" name="dh" value="<?php echo (isset($_POST['deshurler']) ? '1':'0'); ?>"/>
-				<table>
-				<?php
-					asort($cours);
-					foreach($cours as $mat => $nom) {
-						$mat = htmlspecialchars($mat, ENT_COMPAT, "UTF-8");
-						$nom = htmlspecialchars($nom, ENT_COMPAT, "UTF-8");
-						$checked = "";
-						if(isset($_POST['checkedCourses'])) {
-							$checkedCourses = str_replace(", ",",",html_entity_decode($_POST['checkedCourses'], ENT_COMPAT, "UTF-8"));
-							$checkedCourses = explode(",",$checkedCourses);
-			
-							foreach($checkedCourses as $c) { if(strcmp($c, $mat) == 0) $checked = " checked"; }
-						} else {
-							$checked = " checked";
-						}
-						echo "<tr><td><input type=\"checkbox\" name=\"cours[]\" value=\"$mat\" id=\"cours$mat\"".$checked."/></td><td><label for=\"cours$mat\">$mat</label></td><td><label for=\"cours$mat\">$nom</label></td></tr>";
-					}
+			if(count($cours) != 0) {
 				?>
-				</table>
-				<input type="submit" name="getlink" id="getlink" class="zocial secondary" value="Recevoir le lien d'abonnement !"/> ou <input type="submit" name="getfile" id="getfile" class="zocial secondary" value="Télécharger uniquement le fichier ICS">
-			</form>
+				<form class="top" id="formulaire" method="post" action="ade.php">
+					<center><p>Choisissez les <b>cours à inclure</b></p></center>
+					<input type="hidden" name="horaire" value="<?php echo htmlspecialchars(json_encode($result), ENT_COMPAT, "UTF-8");?>"/>
+					<input type="hidden" name="codes" value="<?php echo htmlspecialchars($codes, ENT_COMPAT, "UTF-8"); ?>"/>
+					<input type="hidden" name="semaines" value="<?php echo htmlspecialchars($semaines, ENT_COMPAT, "UTF-8"); ?>"/>
+					<input type="hidden" name="projet" value="<?php echo htmlspecialchars($projectID, ENT_COMPAT, "UTF-8"); ?>"/>
+					<input type="hidden" name="email" value="<?php echo htmlspecialchars($email, ENT_COMPAT, "UTF-8"); ?>"/>
+					<input type="hidden" name="dh" value="<?php echo (isset($_POST['dh']) ? '1':'0'); ?>"/>
+					<input type="hidden" name="TPorCM" value="<?php echo (isset($_POST['TPorCM']) ? '1':'0'); ?>"/>
+					<table>
+					<?php
+						asort($cours);
+						foreach($cours as $mat => $nom) {
+							$mat = htmlspecialchars($mat, ENT_COMPAT, "UTF-8");
+							$nom = htmlspecialchars($nom, ENT_COMPAT, "UTF-8");
+							$checked = "";
+							if(isset($_POST['checkedCourses'])) {
+								$checkedCourses = str_replace(", ",",",html_entity_decode($_POST['checkedCourses'], ENT_COMPAT, "UTF-8"));
+								$checkedCourses = explode(",",$checkedCourses);
+				
+								foreach($checkedCourses as $c) { if(strcmp($c, $mat) == 0) $checked = " checked"; }
+							} else {
+								$checked = " checked";
+							}
+							echo "<tr><td><input type=\"checkbox\" name=\"cours[]\" value=\"$mat\" id=\"cours$mat\"".$checked."/></td><td><label for=\"cours$mat\">$mat</label></td><td>&nbsp;&nbsp;&nbsp;<label for=\"cours$mat\">$nom</label></td></tr>";
+						}
+					?>
+					</table>
+					<input type="submit" name="getlink" id="getlink" class="zocial secondary" value="Recevoir le lien d'abonnement !"/> ou <input type="submit" name="getfile" id="getfile" class="zocial secondary" value="Télécharger uniquement le fichier ICS">
+				</form>
+			<?php } else { ?>
+				<div class="likeform">
+					<center><p><b>Attention:</b> il semblerait qu'il y ait une <b>erreur</b> dans l'intitulé de l'un des <b>codes cours</b> que vous avez indiqué<br>
+					Souvent, il s'agit juste d'un <b>espace mal placé</b> dans le code (par exemple, corrigez &laquo; LINMA 2725 &raquo; par &laquo; LINMA2725 &raquo;)<br>
+					ou alors d'un problème lié au numéro d'<b>ID du projet</b> ADE choisi<br><br>
+					Nous ne pouvons donc <b>malheureusement pas retrouver vos cours</b> dans la base de données ADE :-(<br>
+					Merci de bien vouloir vérifier les <b>codes cours</b> de la page précédente, ou si les problèmes persistent, d'<b>envoyer un message</b> au développeur</p>
+					<a href="javascript:history.back()" class="zocial secondary">Oups, revenir en arrière !</a> ou <a href="http://dammanco.appspot.com/sendMail" class="zocial secondary">Envoyer un message !</a></center>
+				</div>
+			
+			<?php } 
+			} else { ?>
 		
-		<?php } else { ?>
-		
-			<form class="top" id="formulaire" method="post" action="ade.php">
+			<form class="top" id="formulaire" onsubmit="return valider(this)" method="post" action="ade.php">
 				<?php
 				$semaines='';
 				if(isset($_POST['semaines']))
@@ -339,7 +359,8 @@ END:VTIMEZONE\n";
 				Nous sommes en S<?php echo (date("W")+14)%51; ?>. La premiere semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19<br/>
 				<p><label for="projet"><b>ID</b> du projet (pour 2014-2015, c'est 6): </label>
 				<input type="text" name="projet" id="projet" value="<?php echo $projet; ?>"/></p>
-				<p><input type="checkbox" name="deshurler" id="deshurler" checked="checked"/><label for="deshurler"><b>dé-HURLER</b> le nom des cours</label></p>
+				<p><input type="checkbox" name="dh" id="dh" checked="checked"/><label for="dh"><b>dé-HURLER</b> le nom des cours</label><br>
+				<input type="checkbox" name="TPorCM" id="TPorCM" checked="checked"/><label for="TPorCM">Afficher s'il s'agit <b>d'un TP ou d'un CM</b></label></p>
 				<input type="hidden" name="email" id="email" value="null"/>
 				<input type="submit" class="zocial secondary" value="Lancer" /></center>
 			</form>
@@ -371,7 +392,7 @@ END:VTIMEZONE\n";
 		
 		$email = $_POST['email'];
 		
-		$keyLink = file_get_contents("http://ucl2ics.appspot.com/set?codes=".$codes."&courses=".$cours."&weeks=".$weeks."&project=".(int)$_POST['projet']."&dh=".(isset($_POST['dh']) ? '1':'0')."&email=".$email, false, NULL);
+		$keyLink = file_get_contents("http://ucl2ics.appspot.com/set?codes=".$codes."&courses=".$cours."&weeks=".$weeks."&project=".(int)$_POST['projet']."&dh=".(isset($_POST['dh']) ? '1':'0')."&TPorCM=".(isset($_POST['TPorCM']) ? '1':'0')."&email=".$email, false, NULL);
 		//echo "http://ucl2ics.appspot.com/set?codes=".$codes."&courses=".$cours."&weeks=".$weeks."&project=".(int)$_POST['projet']."&dh=".(isset($_POST['dh']) ? '1':'0');
 		$link = "http://ucl2ics.appspot.com/get?key=".$keyLink;
 		
@@ -408,7 +429,7 @@ END:VTIMEZONE\n";
 		
 		$project = (int)$_GET['project'];
 		
-		$t = getCoursesFromCodes($codes,$weeks,$project,isset($_GET['dh']) && $_GET['dh'] == 1);
+		$t = getCoursesFromCodes($codes,$weeks,$project,isset($_GET['dh']) && $_GET['dh'] == 1,isset($_GET['TPorCM']) && $_GET['TPorCM'] == 1);
 		$horaire = $t[1];
 		header('Content-type: text/calendar; charset=utf-8');
 		header('Content-Disposition: inline; filename=calendar.ics');
