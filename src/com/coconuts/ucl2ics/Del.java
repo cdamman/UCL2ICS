@@ -28,10 +28,10 @@ public class Del extends HttpServlet {
 		User user = userService.getCurrentUser();
 		
 		if (user != null) {
-			if (PMF.checkAdministrator(user.getEmail())) {
+			if (Util.checkAdministrator(user.getEmail())) {
 				String keyString = req.getParameter("key");
 				String confirm = req.getParameter("confirm");
-				PersistenceManager pm = PMF.get().getPersistenceManager();
+				PersistenceManager pm = Util.get().getPersistenceManager();
 				
 				try {
 					if (keyString == null) {

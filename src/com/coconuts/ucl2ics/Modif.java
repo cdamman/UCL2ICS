@@ -34,9 +34,9 @@ public class Modif extends HttpServlet {
 		User user = userService.getCurrentUser();
 		
 		if (user != null) {
-			if (PMF.checkAdministrator(user.getEmail())) {
+			if (Util.checkAdministrator(user.getEmail())) {
 				String keyString = req.getParameter("key");
-				PersistenceManager pm = PMF.get().getPersistenceManager();
+				PersistenceManager pm = Util.get().getPersistenceManager();
 				
 				try {
 					if (keyString == null) {
@@ -128,9 +128,9 @@ public class Modif extends HttpServlet {
 										List<StudentAgenda> results2 = (List<StudentAgenda>) query2.execute(key);
 										if (!results2.isEmpty())
 											for (StudentAgenda e2 : results2) {
-												e2.setCodes(new Text(PMF.unsplitVirgule(codes)));
-												e2.setCourses(new Text(PMF.unsplitVirgule(courses)));
-												e2.setSemaines(PMF.unsplitVirgule(semaines));
+												e2.setCodes(new Text(Util.unsplitVirgule(codes)));
+												e2.setCourses(new Text(Util.unsplitVirgule(courses)));
+												e2.setSemaines(Util.unsplitVirgule(semaines));
 												e2.setProjectID(Integer.valueOf(projectIDString));
 												e2.setSTFU(Integer.valueOf(STFUString));
 												e2.setTPorCM(Integer.valueOf(TPorCMString));

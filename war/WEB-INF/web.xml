@@ -27,15 +27,6 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>Login</servlet-name>
-		<servlet-class>com.coconuts.ucl2ics.Login</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Login</servlet-name>
-		<url-pattern>/login</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
 		<servlet-name>Del</servlet-name>
 		<servlet-class>com.coconuts.ucl2ics.Del</servlet-class>
 	</servlet>
@@ -63,7 +54,7 @@
 	</servlet-mapping>
 	
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
+		<welcome-file>ucl2ics</welcome-file>
 	</welcome-file-list>
  <servlet>
   <servlet-name>SystemServiceServlet</servlet-name>

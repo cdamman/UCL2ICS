@@ -34,7 +34,7 @@ public class Set extends HttpServlet {
 		String TPorCMString = req.getParameter("TPorCM");
 		String email = req.getParameter("email");
 		
-		PersistenceManager pm = PMF.get().getPersistenceManager();
+		PersistenceManager pm = Util.get().getPersistenceManager();
 		try {
 			if ((codes == null) || (courses == null) || (semaines == null) || (projectIDString == null)) {
 				resp.getWriter().println("Error null");

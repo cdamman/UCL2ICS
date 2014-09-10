@@ -20,7 +20,7 @@ public class Get extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {		
 		String keyString = req.getParameter("key");
-		PersistenceManager pm = PMF.get().getPersistenceManager();
+		PersistenceManager pm = Util.get().getPersistenceManager();
 		
 		try {
 			if (keyString == null) {

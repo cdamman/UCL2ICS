@@ -9,7 +9,7 @@ import java.util.Calendar;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
-public final class PMF {
+public final class Util {
 	private static final PersistenceManagerFactory pmfInstance = JDOHelper.getPersistenceManagerFactory("transactions-optional");
 	
 	public static PersistenceManagerFactory get() {
@@ -38,6 +38,7 @@ public final class PMF {
 				"		<link rel=\"stylesheet\" type=\"text/css\" href=\"http://ucl2ics.appspot.com/css/zocial.css\">" +
 				"		<link rel=\"stylesheet\" type=\"text/css\" href=\"http://ucl2icsphp.appspot.com/ade.css\">" +
 				"		<script type=\"text/javascript\" src=\"http://ucl2icsphp.appspot.com/form.js\"></script>" +
+				"		<meta name=\"google-site-verification\" content=\"jkROj7JWwYMIgjlzlWVRh-TcGZUZ8woJ1D5fBVqk-C4\" />" +
 				"		<title>UCL ADE to ICS</title>" +
 				"	</head>" +
 				"	<body>" +
@@ -49,6 +50,21 @@ public final class PMF {
 				"		Voir le <a href=\"https://github.com/cdamman/UCL2ICS\" target=\"_blank\">code source App Engine</a> ! Utiliser <a href=\"http://ucl2ics.appspot.com/API.pdf\" target=\"_blank\">l'API</a></div>" +
 				"	</body>" +
 				"</html>";
+	}
+	
+	public static String beginHome() {
+		return 	"<form class=\"top\" id=\"formulaire\" method=\"get\" action=\"/ucl2ics\">" +
+				"<center><p><label>Cet outil a pour objectif d'exporter le calendrier universitaire fourni par <b>ADE Expert</b> (ou <a href=\"https://www.uclouvain.be/horaires-epl.html\" target=\"_blank\">l'outil horaire de l'EPL</a> ou celui de votre FAC)<br>" +
+				" vers vos gestionnaires de calendrier préférés comme <b>Google Agenda</b> ou <b>iCalendar</b></label><br>" +
+				"<input type=\"hidden\" name=\"login\" value=\"false\"></p>" +
+				"<input type=\"submit\" value=\"Commencer !\" class=\"zocial secondary\"></center>" +
+				"</form>" +
+				"<br/>" +
+				"<form class=\"top\" id=\"formulaire\" method=\"get\" action=\"/ucl2ics\">" +
+				"<center><p><label>Vous pouvez également vous <b>connecter</b> grâce à votre compte <b>Google</b> ou <b>Google UCL</b> afin de pouvoir modifier votre<br>synchronisation horaire ICS dans le futur</label><br>" +
+				"<input type=\"hidden\" name=\"login\" value=\"true\"></p>" +
+				"<a href=\"/ucl2ics?login=true\" class=\"zocial google\">Se connecter</a></center>" +
+				"</form>";
 	}
 	
 	public static String beginForm(String codes, String semaines, int projectID, String email) {

@@ -27,8 +27,8 @@ public class Admin extends HttpServlet {
 		User user = userService.getCurrentUser();
 		
 		if (user != null) {
-			if (PMF.checkAdministrator(user.getEmail())) {
-				PersistenceManager pm = PMF.get().getPersistenceManager();
+			if (Util.checkAdministrator(user.getEmail())) {
+				PersistenceManager pm = Util.get().getPersistenceManager();
 				
 				resp.setContentType("text/html");
 				resp.setCharacterEncoding("UTF-8");
