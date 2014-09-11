@@ -42,12 +42,12 @@ public class Set extends HttpServlet {
 				resp.getWriter().println("Error empty");
 			} else {
 	        	Query query = pm.newQuery(StudentAgenda.class);
-	        	query.setFilter("email == emailParam && email != null");
+	        	query.setFilter("email == emailParam");
 	        	query.setOrdering("email asc");
 	        	query.declareParameters("String emailParam");
 	            try {
 					List<StudentAgenda> results = (List<StudentAgenda>) query.execute(email);
-					if (!results.isEmpty()) {
+					if (!results.isEmpty() && !email.equals("null")) {
 					    for (StudentAgenda e : results) {
 					    	e.setCodes(codes);
                 			e.setCourses(courses);
