@@ -52,7 +52,7 @@ public class UCL2ICS extends HttpServlet {
 		                			resp.getWriter().println(Util.header());
 		        	            	resp.getWriter().println("<p><div style=\"float: left;\">Bienvenue <b>" + user.getEmail() + "</b> ! Vous pouvez maintenant modifier votre horaire via le formulaire ci-dessous !</div>" +
 		        	            			"<div style=\"float: right; margin-top: -0.5em;\"><a href=\"" + userService.createLogoutURL("/ucl2ics?login=false") + "\" class=\"zocial google\" style=\"vertical-align:middle\">Se déconnecter</a></div></p><br><br>");
-		        	        		resp.getWriter().println(Util.beginFormCheckedCourses(e.getCodes().getValue(), e.getCourses().getValue(), e.getSemaines(), e.getProjectID(), user.getEmail()));
+		        	        		resp.getWriter().println(Util.beginFormCheckedCourses(e.getCodes().getValue(), e.getCourses().getValue(), e.getSemaines(), e.getProjectID(), e.getEmail()));
 		        	
 		        	        		resp.getWriter().println(Util.footer());
 			                    }

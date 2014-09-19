@@ -28,7 +28,7 @@
 	//error_reporting(E_NONE);
 	
 	function printHeader() {
-		echo 	"<html>" .
+		return 	"<html>" .
 				"	<head>" .
 				"		<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">" .
 				"		<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"http://ucl2icsphp.appspot.com/favicon.ico\">" .
@@ -42,7 +42,7 @@
 	}
 	
 	function printFooter() {
-		echo 	"		<div id=\"footer\">Ré-écrit sur Google App Engine par <a href=\"http://dammanco.appspot.com\" target=\"_blank\">Corentin Damman</a>, basé sur le code de Ploki<br>" .
+		return 	"		<div id=\"footer\">Ré-écrit sur Google App Engine par <a href=\"http://dammanco.appspot.com\" target=\"_blank\">Corentin Damman</a>, basé sur le code de Ploki<br>" .
 				"		Voir le <a href=\"https://github.com/cdamman/UCL2ICS\" target=\"_blank\">code source App Engine</a> ! Utiliser <a href=\"http://ucl2ics.appspot.com/API.pdf\" target=\"_blank\">l'API</a></div>" .
 				"	</body>" .
 				"</html>";
@@ -95,7 +95,12 @@
 			);
 		$context = stream_context_create($context);
 		//$result = file_get_contents($url.'/ade/custom/modules/plannings/direct_planning.jsp?weeks='.$weeks.'&code='.$codes.'&login=etudiant&password=student&projectId='.$projectID, false, $context);
-		$result = file_get_contents($url.'/jsp/custom/modules/plannings/direct_planning.jsp?keepSelection&weeks='.$weeks.'&code='.$codes.'&login=etudiant&password=student&projectId='.$projectID, false, $context);
+		$result = file_get_contents($url.'/jsp/custom/modules/plannings/direct_planning.jsp?keepSelection&weeks='.$weeks.'&code='.$codes.'&login=etudiant&password=student&projectId='.$projectID, false, $context)
+				or die('<div class="likeform">'.
+					'<center><p><b>Attention:</b> il semblerait qu\'il y ait une <b>erreur</b><br>'.
+					'Merci de bien vouloir <b>réessayer</b> dans quelques instants, ou si les problèmes persistent, d\'<b>envoyer un message</b> au développeur</p>'.
+					'<a href="javascript:history.back()" class="zocial secondary">Oups, revenir en arrière !</a> ou <a href="http://dammanco.appspot.com/sendMail" class="zocial secondary">Envoyer un message !</a></center>'.
+				'</div>'.printFooter());
 		$cookies=array();
 		foreach($http_response_header as $s) {
 			if(preg_match('|^Set-Cookie:\s*([^=]+)=([^;]+);(.+)$|',$s,$parts))
@@ -114,7 +119,12 @@
 		
 		// CHARGEMENT DE LA SESSION ET AFFICHAGE EN TABLEAU
 		//$horaire = file_get_contents($url.'/ade/custom/modules/plannings/info.jsp?order=slot', false, $context2);
-		$horaire = file_get_contents($url.'/jsp/custom/modules/plannings/info.jsp?order=slot', false, $context2);
+		$horaire = file_get_contents($url.'/jsp/custom/modules/plannings/info.jsp?order=slot', false, $context2)
+				or die('<div class="likeform">'.
+					'<center><p><b>Attention:</b> il semblerait qu\'il y ait une <b>erreur</b><br>'.
+					'Merci de bien vouloir <b>réessayer</b> dans quelques instants, ou si les problèmes persistent, d\'<b>envoyer un message</b> au développeur</p>'.
+					'<a href="javascript:history.back()" class="zocial secondary">Oups, revenir en arrière !</a> ou <a href="http://dammanco.appspot.com/sendMail" class="zocial secondary">Envoyer un message !</a></center>'.
+				'</div>'.printFooter());
 		
 		// TRAITEMENT DE L'HORAIRE
 		$horaire = str_replace('<BODY>','',$horaire);
@@ -122,7 +132,11 @@
 		$horaire = str_replace('&','&amp;',$horaire);
 		
 		$dom = new DOMDocument(); // creation d'un objet DOM pour lire le html 
-		$dom->loadHTML($horaire) or die('erreur');
+		$dom->loadHTML($horaire) or die('<div class="likeform">'.
+					'<center><p><b>Attention:</b> il semblerait qu\'il y ait une <b>erreur</b><br>'.
+					'Merci de bien vouloir <b>réessayer</b> dans quelques instants, ou si les problèmes persistent, d\'<b>envoyer un message</b> au développeur</p>'.
+					'<a href="javascript:history.back()" class="zocial secondary">Oups, revenir en arrière !</a> ou <a href="http://dammanco.appspot.com/sendMail" class="zocial secondary">Envoyer un message !</a></center>'.
+				'</div>'.printFooter());
 		$lignes = $dom->getElementsByTagName('tr'); // on recupere toute les lignes
 		
 		$result = array();
@@ -262,7 +276,7 @@ END:VTIMEZONE\n";
 	if(!isset($_POST['horaire']) && !(isset($_GET['codes']) && isset($_GET['courses']) && isset($_GET['weeks']) && isset($_GET['project'])))
 	{
 		//Nicolas, c'est rien que pour toi.
-		printHeader();
+		echo printHeader();
 		
 		if (isset($_POST['codes']) && $_POST['codes']!='') {
 			// PARAMETRES -------------------------------------------------------------------------------------------------------------
@@ -354,8 +368,8 @@ END:VTIMEZONE\n";
 				<input type="text" name="codes" id="codes" size="130" value="<?php echo $codes;?>"/></p>
 				<p><label for="semaines"><b>Semaines</b> désirées (séparées par virgules): </label><br/>
 				<input type="text" name="semaines" id="semaines" value="<?php echo $semaines; ?>" size="130"/><br/>
-				<input type="button" value="Sélectionner le 1er quadrimestre" onClick="this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18'">
-				<input type="button" value="Sélectionner le 2ème quadrimestre" onClick="this.form.semaines.value='19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39'">
+				<input type="button" value="Sélectionner le 1er quadrimestre" onClick="this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19'">
+				<input type="button" value="Sélectionner le 2ème quadrimestre" onClick="this.form.semaines.value='20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39'">
 				<input type="button" value="Sélectionner cette semaine" onClick="this.form.semaines.value='<?php echo (date("W")+14)%51; ?>'">
 				<input type="button" value="Sélectionner toutes les semaines" onClick="this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51'"><br/>
 				Nous sommes en S<?php echo (date("W")+14)%51; ?>. La premiere semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19<br/>
@@ -367,7 +381,7 @@ END:VTIMEZONE\n";
 				<input type="submit" class="zocial secondary" value="Lancer" /></center>
 			</form>
 			<?php }
-		printFooter();
+		echo printFooter();
 	} else if(isset($_POST['horaire']) && !isset($_POST['getlink'])) {
 		$horaire = json_decode(htmlspecialchars_decode($_POST['horaire'], ENT_COMPAT), true);
 		header('Content-type: text/calendar; charset=utf-8');
@@ -398,7 +412,7 @@ END:VTIMEZONE\n";
 		//echo "http://ucl2ics.appspot.com/set?codes=".$codes."&courses=".$cours."&weeks=".$weeks."&project=".(int)$_POST['projet']."&dh=".(isset($_POST['dh']) ? '1':'0');
 		$link = "http://ucl2ics.appspot.com/get?key=".$keyLink;
 		
-		printHeader(); ?>
+		echo printHeader(); ?>
 			<div class="likeform">
 				<center><p>Le <b>lien d'abonnement</b> est <br/>
 				<div class="monospace">
@@ -411,7 +425,7 @@ END:VTIMEZONE\n";
 				De cette manière, si un cours apparait ou disparait de ADE, la même action se déroulera sur votre calendrier ;-)<br/>
 				Vous pouvez également directement cliquer sur le lien pour <b>télécharger le fichier ICS</b>.</p></center>
 			</div>
-		<?php printFooter();
+		<?php echo printFooter();
 	} else if(isset($_GET['codes']) && isset($_GET['courses']) && isset($_GET['weeks']) && isset($_GET['project'])) {
 		$courses = explode(',',$_GET['courses']);
 		foreach($courses as $key => $val)

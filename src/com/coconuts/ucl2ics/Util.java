@@ -73,8 +73,8 @@ public final class Util {
 				"<input type=\"text\" name=\"codes\" id=\"codes\" size=\"130\" value=\"" + codes + "\"/></p>" + 
 				"<p><label for=\"semaines\"><b>Semaines</b> désirées (séparées par virgules): </label><br/>" + 
 				"<input type=\"text\" name=\"semaines\" id=\"semaines\" value=\"" + semaines + "\" size=\"130\"/><br/>" + 
-				"<input type=\"button\" value=\"Sélectionner le 1er quadrimestre\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18'\">" + 
-				"<input type=\"button\" value=\"Sélectionner le 2ème quadrimestre\" onClick=\"this.form.semaines.value='19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39'\">" + 
+				"<input type=\"button\" value=\"Sélectionner le 1er quadrimestre\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19'\">" + 
+				"<input type=\"button\" value=\"Sélectionner le 2ème quadrimestre\" onClick=\"this.form.semaines.value='20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39'\">" + 
 				"<input type=\"button\" value=\"Sélectionner cette semaine\" onClick=\"this.form.semaines.value='"+String.valueOf((Calendar.getInstance().get(3) + 14) % 51)+"'\">" + 
 				"<input type=\"button\" value=\"Sélectionner toutes les semaines\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51'\"><br/>" + 
 				"Nous sommes en S" + String.valueOf((Calendar.getInstance().get(3) + 14) % 51) + ". La première semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19</p>" +
@@ -93,8 +93,8 @@ public final class Util {
 				"<input type=\"text\" name=\"codes\" id=\"codes\" size=\"130\" value=\"" + codes + "\"/></p>" + 
 				"<p><label for=\"semaines\"><b>Semaines</b> désirées (séparées par virgules): </label><br/>" + 
 				"<input type=\"text\" name=\"semaines\" id=\"semaines\" value=\"" + semaines + "\" size=\"130\"/><br/>" + 
-				"<input type=\"button\" value=\"Sélectionner le 1er quadrimestre\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18'\">" + 
-				"<input type=\"button\" value=\"Sélectionner le 2ème quadrimestre\" onClick=\"this.form.semaines.value='19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39'\">" + 
+				"<input type=\"button\" value=\"Sélectionner le 1er quadrimestre\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19'\">" + 
+				"<input type=\"button\" value=\"Sélectionner le 2ème quadrimestre\" onClick=\"this.form.semaines.value='20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39'\">" + 
 				"<input type=\"button\" value=\"Sélectionner cette semaine\" onClick=\"this.form.semaines.value='"+String.valueOf((Calendar.getInstance().get(3) + 14) % 51)+"'\">" + 
 				"<input type=\"button\" value=\"Sélectionner toutes les semaines\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51'\"><br/>" + 
 				"Nous sommes en S" + String.valueOf((Calendar.getInstance().get(3) + 14) % 51) + ". La première semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19</p>" +
@@ -113,8 +113,8 @@ public final class Util {
 				"<input type=\"text\" name=\"codes\" id=\"codes\" size=\"130\" value=\"" + codes + "\"/></p>" + 
 				"<p><label for=\"semaines\"><b>Semaines</b> désirées (séparées par virgules): </label><br/>" + 
 				"<input type=\"text\" name=\"semaines\" id=\"semaines\" value=\"" + semaines + "\" size=\"130\"/><br/>" + 
-				"<input type=\"button\" value=\"Sélectionner le 1er quadrimestre\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18'\">" + 
-				"<input type=\"button\" value=\"Sélectionner le 2ème quadrimestre\" onClick=\"this.form.semaines.value='19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39'\">" + 
+				"<input type=\"button\" value=\"Sélectionner le 1er quadrimestre\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19'\">" + 
+				"<input type=\"button\" value=\"Sélectionner le 2ème quadrimestre\" onClick=\"this.form.semaines.value='20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39'\">" + 
 				"<input type=\"button\" value=\"Sélectionner cette semaine\" onClick=\"this.form.semaines.value='"+String.valueOf((Calendar.getInstance().get(3) + 14) % 51)+"'\">" + 
 				"<input type=\"button\" value=\"Sélectionner toutes les semaines\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51'\"><br/>" + 
 				"Nous sommes en S" + String.valueOf((Calendar.getInstance().get(3) + 14) % 51) + ". La première semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19</p>" +
