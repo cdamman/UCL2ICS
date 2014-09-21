@@ -6,6 +6,7 @@
 package com.coconuts.ucl2ics;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -41,30 +42,43 @@ public class Set extends HttpServlet {
 			} else if ((codes.toString().isEmpty()) || (courses.toString().isEmpty()) || (semaines.isEmpty()) || (projectIDString.isEmpty())) {
 				resp.getWriter().println("Error empty");
 			} else {
-	        	Query query = pm.newQuery(StudentAgenda.class);
-	        	query.setFilter("email == emailParam");
-	        	query.setOrdering("email asc");
-	        	query.declareParameters("String emailParam");
-	            try {
-					List<StudentAgenda> results = (List<StudentAgenda>) query.execute(email);
-					if (!results.isEmpty() && !email.equals("null")) {
-					    for (StudentAgenda e : results) {
-					    	e.setCodes(codes);
-                			e.setCourses(courses);
-                			e.setSemaines(semaines);
-                			e.setProjectID(Integer.valueOf(projectIDString));
-                			e.setSTFU(BoolValueOf(STFUString));
-                			e.setSTFU(BoolValueOf(TPorCMString));
-            				resp.getWriter().println(e.getKey());
-					    }
-					} else {
-						StudentAgenda e = new StudentAgenda(pm.getObjectById(Counter.class, "Counter").getNextKey(), codes, courses, semaines, Integer.valueOf(projectIDString), BoolValueOf(STFUString), BoolValueOf(TPorCMString), email);
-						pm.makePersistent(e);
-						resp.getWriter().println(e.getKey());
-					}
-	            } finally {
-	                query.closeAll();
-	            }
+				if (!email.equals("null")) {
+					try {
+						email = Util.decrypt(email, pm.getObjectById(Secure.class, "PrivateKey").getPrivateKey());
+			        } catch (GeneralSecurityException e) {
+			        	resp.getWriter().println("Error " + e.getMessage());
+			        	e.printStackTrace();
+			        }
+					
+		        	Query query = pm.newQuery(StudentAgenda.class);
+		        	query.setFilter("email == emailParam");
+		        	query.setOrdering("email asc");
+		        	query.declareParameters("String emailParam");
+		            try {
+						List<StudentAgenda> results = (List<StudentAgenda>) query.execute(email);
+						if (!results.isEmpty()) {
+						    for (StudentAgenda e : results) {
+						    	e.setCodes(codes);
+	                			e.setCourses(courses);
+	                			e.setSemaines(semaines);
+	                			e.setProjectID(Integer.valueOf(projectIDString));
+	                			e.setSTFU(BoolValueOf(STFUString));
+	                			e.setSTFU(BoolValueOf(TPorCMString));
+	            				resp.getWriter().println(e.getKey());
+						    }
+						} else {
+							StudentAgenda e = new StudentAgenda(pm.getObjectById(Counter.class, "Counter").getNextKey(), codes, courses, semaines, Integer.valueOf(projectIDString), BoolValueOf(STFUString), BoolValueOf(TPorCMString), email);
+							pm.makePersistent(e);
+							resp.getWriter().println(e.getKey());
+						}
+		            } finally {
+		                query.closeAll();
+		            }
+				} else {
+					StudentAgenda e = new StudentAgenda(pm.getObjectById(Counter.class, "Counter").getNextKey(), codes, courses, semaines, Integer.valueOf(projectIDString), BoolValueOf(STFUString), BoolValueOf(TPorCMString), "null");
+					pm.makePersistent(e);
+					resp.getWriter().println(e.getKey());
+				}
 			}
 		} finally {
 			pm.close();

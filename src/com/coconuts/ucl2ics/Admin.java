@@ -46,8 +46,16 @@ public class Admin extends HttpServlet {
 				} catch(JDOObjectNotFoundException e) {
 					counter = new Counter();
 					pm.makePersistent(counter);
-					resp.getWriter().println("<script type=\"text/javascript\" language=\"javascript\">alert(\"Bienvenue :-) DB init !\");</script>");
+					resp.getWriter().println("<script type=\"text/javascript\" language=\"javascript\">alert(\"Bienvenue :-) DB init counter !\");</script>");
 				}
+				Secure privateKey;
+		        try {
+		        	privateKey = pm.getObjectById(Secure.class, "PrivateKey");
+		        } catch (JDOObjectNotFoundException e) {
+		        	privateKey = new Secure();
+		        	pm.makePersistent(privateKey);
+		        	resp.getWriter().println("<script type=\"text/javascript\" language=\"javascript\">alert(\"Bienvenue :-) DB init secure !\");</script>");
+		        }
 
 				int number = 0;
 				try {
@@ -68,7 +76,7 @@ public class Admin extends HttpServlet {
 						query.closeAll();
 					}
 				} finally {
-					resp.getWriter().println("  </table>  <center><h4>Number of Students: "+String.valueOf(number)+"/<a href=\"modif?key=-1\">"+String.valueOf(counter.getKey())+"</a></h4></center>    <br></body></html>");
+					resp.getWriter().println("  </table>  <center><h4>Number of Students: "+String.valueOf(number)+"/<a href=\"modif?key=-1\">"+String.valueOf(counter.getKey())+"</a><br/>Private Key: <a href=\"modif?key=-2\">" + String.valueOf(privateKey.getPrivateKey()) + "</a></h4></h4></center>    <br></body></html>");
 					pm.close();
 				}
 			} else {

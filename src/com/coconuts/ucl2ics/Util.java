@@ -5,9 +5,16 @@
 
 package com.coconuts.ucl2ics;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.Calendar;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
+
+import org.apache.commons.codec.binary.Base64;
 
 public final class Util {
 	private static final PersistenceManagerFactory pmfInstance = JDOHelper.getPersistenceManagerFactory("transactions-optional");
@@ -135,5 +142,23 @@ public final class Util {
 		if(longTextUnsplitted.endsWith(" "))
 			longTextUnsplitted = longTextUnsplitted.substring(0,longTextUnsplitted.length()-1);
 		return longTextUnsplitted;
+	}
+	
+	public static String encrypt(String plainText, String encryptionKey)
+		    throws GeneralSecurityException, UnsupportedEncodingException {
+		Cipher cipher = Cipher.getInstance("AES");
+		SecretKeySpec key = new SecretKeySpec(encryptionKey.getBytes("UTF-8"), "AES");
+		cipher.init(Cipher.ENCRYPT_MODE, key);
+		byte[] binaryData = cipher.doFinal(plainText.getBytes("UTF-8"));
+		return Base64.encodeBase64URLSafeString(binaryData);
+	}
+		  
+	public static String decrypt(String cipherText, String encryptionKey)
+		    throws GeneralSecurityException, UnsupportedEncodingException {
+		Cipher cipher = Cipher.getInstance("AES");
+		SecretKeySpec key = new SecretKeySpec(encryptionKey.getBytes("UTF-8"), "AES");
+		cipher.init(Cipher.DECRYPT_MODE, key);
+		byte[] binaryData = Base64.decodeBase64(cipherText);
+		return new String(cipher.doFinal(binaryData), "UTF-8");
 	}
 }

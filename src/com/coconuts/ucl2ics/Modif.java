@@ -59,6 +59,9 @@ public class Modif extends HttpServlet {
 									pm.getObjectById(Counter.class, "Counter").setKey(Long.valueOf(newValue));
 									resp.getWriter().println("Counter modified !<br><meta http-equiv=\"Refresh\" content=\"1;URL=admin\">");
 								}
+							} else if (key == -2) {
+				                pm.makePersistent(new Secure());
+				                resp.getWriter().println("New private key generated !<br><meta http-equiv=\"Refresh\" content=\"1;URL=admin\">");
 							} else if (key <= 0) {
 								resp.getWriter().println("Error <=0<br>");
 							} else {
