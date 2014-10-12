@@ -2,8 +2,6 @@
 	/*
 		UCL2ICS v6 APP ENGINE EDITION
 		Corentin Damman & Guillaume Derval, basé sur le travail de ploki (forum-epl)
-		- Ajout d'un UID pour se conformer à la RFC2445
-
 		- Changement de l'adresse pour ADE v6
 		
 		- Fix general
@@ -140,7 +138,7 @@
 					'<a href="javascript:history.back()" class="zocial secondary">Oups, revenir en arrière !</a> ou <a href="http://dammanco.appspot.com/sendMail" class="zocial secondary">Envoyer un message !</a></center>'.
 				'</div>'.printFooter());
 		$lignes = $dom->getElementsByTagName('tr'); // on recupere toute les lignes
-
+		
 		$result = array();
 		$cours = array();
 		$i=0;
@@ -218,8 +216,6 @@
 	}
 	
 	function makeICS($horaire, $cours) {
-		date_default_timezone_set('UTC');
-
 		$buf_ics = "BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//ETSIL 3//iCal 1.0//EN
@@ -244,8 +240,7 @@ END:DAYLIGHT
 END:VTIMEZONE\n";
 		
 		// EXTRACTION DES DONNEES DU DOMDOCUMENT
-		$stamp_id = sprintf("%02d", rand(0,59));
-		$stamp6 = sprintf("%06d", rand(0,999999));
+		$stamp_id = rand(10,59);
 		foreach ($horaire as $entree) {
 			if(!in_array($entree['mat'], $cours))
 				continue;
@@ -266,11 +261,6 @@ END:VTIMEZONE\n";
 				else
 					$buf_ics .= "no@email.be";
 				$buf_ics .= "\n";
-			}
-			if(isset($_POST['email']) && $_POST['email'] != "null") {
-				$buf_ics .= "UID:".date('Ymd\THi').$stamp_id.'Z-'.$date.'T'.$heuress[0].$heuress[1].$stamp_id.'Z-'.$_POST['email'].'@'.$_SERVER['SERVER_NAME']."\n";
-			} else {
-				$buf_ics .= "UID:".date('Ymd\THi').$stamp_id.'Z-'.$date.'T'.$heuress[0].$heuress[1].$stamp_id.'Z-'.$stamp6.'@'.$_SERVER['SERVER_NAME']."\n";
 			}
 			$buf_ics .= "DTSTAMP:20100130T1200".$stamp_id."Z\n";
 			$buf_ics .= 'DTSTART;TZID="Bruxelles, Copenhague, Madrid, Paris":'.$date.'T'.$heuress[0].$heuress[1]."00\n";
