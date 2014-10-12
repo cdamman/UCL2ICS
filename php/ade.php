@@ -141,7 +141,7 @@
 					'<a href="javascript:history.back()" class="zocial secondary">Oups, revenir en arrière !</a> ou <a href="http://dammanco.appspot.com/sendMail" class="zocial secondary">Envoyer un message !</a></center>'.
 				'</div>'.printFooter());
 		$lignes = $dom->getElementsByTagName('tr'); // on recupere toute les lignes
-		
+
 		$result = array();
 		$cours = array();
 		$i=0;
