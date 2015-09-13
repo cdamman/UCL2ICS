@@ -85,7 +85,7 @@ public final class Util {
 				"<input type=\"button\" value=\"Sélectionner cette semaine\" onClick=\"this.form.semaines.value='"+String.valueOf((Calendar.getInstance().get(3) + 14) % 51)+"'\">" + 
 				"<input type=\"button\" value=\"Sélectionner toutes les semaines\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51'\"><br/>" + 
 				"Nous sommes en S" + String.valueOf((Calendar.getInstance().get(3) + 14) % 51) + ". La première semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19</p>" +
-				"<p><label for=\"projet\"><b>ID</b> du projet (pour 2014-2015, c'est 6): </label>" + 
+				"<p><label for=\"projet\"><b>ID</b> du projet (pour 2015-2016, c'est 12): </label>" + 
 				"<input type=\"text\" name=\"projet\" id=\"projet\" value=\"" + String.valueOf(projectID) + "\"/></p>" + 
 				"<p><input type=\"checkbox\" name=\"dh\" id=\"dh\" checked=\"checked\"/><label for=\"dh\"><b>dé-HURLER</b> le nom des cours</label><br>" +
 				"<input type=\"checkbox\" name=\"TPorCM\" id=\"TPorCM\" checked=\"checked\"/><label for=\"TPorCM\">Afficher s'il s'agit <b>d'un TP ou d'un CM</b></label></p>" + 
@@ -105,7 +105,7 @@ public final class Util {
 				"<input type=\"button\" value=\"Sélectionner cette semaine\" onClick=\"this.form.semaines.value='"+String.valueOf((Calendar.getInstance().get(3) + 14) % 51)+"'\">" + 
 				"<input type=\"button\" value=\"Sélectionner toutes les semaines\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51'\"><br/>" + 
 				"Nous sommes en S" + String.valueOf((Calendar.getInstance().get(3) + 14) % 51) + ". La première semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19</p>" +
-				"<p><label for=\"projet\"><b>ID</b> du projet (pour 2014-2015, c'est 6): </label>" + 
+				"<p><label for=\"projet\"><b>ID</b> du projet (pour 2015-2016, c'est 12): </label>" + 
 				"<input type=\"text\" name=\"projet\" id=\"projet\" value=\"" + String.valueOf(projectID) + "\"/></p>" + 
 				"<p><input type=\"checkbox\" name=\"dh\" id=\"dh\" checked=\"checked\"/><label for=\"dh\"><b>dé-HURLER</b> le nom des cours</label><br>" +
 				"<input type=\"checkbox\" name=\"TPorCM\" id=\"TPorCM\" checked=\"checked\"/><label for=\"TPorCM\">Afficher s'il s'agit <b>d'un TP ou d'un CM</b></label></p>" + 
@@ -125,7 +125,7 @@ public final class Util {
 				"<input type=\"button\" value=\"Sélectionner cette semaine\" onClick=\"this.form.semaines.value='"+String.valueOf((Calendar.getInstance().get(3) + 14) % 51)+"'\">" + 
 				"<input type=\"button\" value=\"Sélectionner toutes les semaines\" onClick=\"this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51'\"><br/>" + 
 				"Nous sommes en S" + String.valueOf((Calendar.getInstance().get(3) + 14) % 51) + ". La première semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19</p>" +
-				"<p><label for=\"projet\"><b>ID</b> du projet (pour 2014-2015, c'est 6): </label>" + 
+				"<p><label for=\"projet\"><b>ID</b> du projet (pour 2015-2016, c'est 12): </label>" + 
 				"<input type=\"text\" name=\"projet\" id=\"projet\" value=\"" + String.valueOf(projectID) + "\"/></p>" + 
 				"<p><input type=\"checkbox\" name=\"dh\" id=\"dh\" checked=\"checked\"/><label for=\"dh\"><b>dé-HURLER</b> le nom des cours</label><br>" +
 				"<input type=\"checkbox\" name=\"TPorCM\" id=\"TPorCM\" checked=\"checked\"/><label for=\"TPorCM\">Afficher s'il s'agit <b>d'un TP ou d'un CM</b></label></p>" + 
