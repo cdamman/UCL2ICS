@@ -260,14 +260,14 @@ END:VTIMEZONE\n";
 			$description = $entree['mat'];
 			$description .= "\n";
 			$buf_ics .= "DESCRIPTION:".$description;
-			if($entree['prof'] != "") {
+			/*if($entree['prof'] != "") {
 				$buf_ics .= "ORGANIZER;CN=".$entree['prof'].":MAILTO:";
 				if($entree['profmail'] != "")
 					$buf_ics .= str_replace(' ', ',', trim($entree['profmail']));
 				else
 					$buf_ics .= "no@email.be";
 				$buf_ics .= "\n";
-			}
+			}*/
 			if(isset($_POST['email']) && $_POST['email'] != "null") {
 				$buf_ics .= "UID:".date('Ymd\THi').$stamp_id.'Z-'.$date.'T'.$heuress[0].$heuress[1].$stamp_id.'Z-'.$_POST['email'].'@'.$_SERVER['SERVER_NAME']."\n";
 			} else {
