@@ -1,6 +1,6 @@
 application: ucl2icsphp
 version: 6
-runtime: php
+runtime: php55
 api_version: 1
 
 handlers:

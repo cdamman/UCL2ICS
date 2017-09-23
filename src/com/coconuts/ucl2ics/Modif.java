@@ -113,7 +113,7 @@ public class Modif extends HttpServlet {
 									"<TR><TD>&nbsp;Semaines&nbsp;</TD><TD><INPUT type=text name=\"semaines\" value=\"" + semainesOld+ "\" size=100></TD></TR>" + 
 									"<TR><TD>&nbsp;ProjectID&nbsp;</TD><TD><INPUT type=text name=\"projectID\" value=\"" + projectIDOld + "\" size=40></TD></TR>" + 
 									"<TR><TD>&nbsp;STFU ?&nbsp;</TD><TD><INPUT type=text name=\"STFU\" value=\"" + STFUOld + "\" size=40></TD></TR>" + 
-									"<TR><TD>&nbsp;STFU ?&nbsp;</TD><TD><INPUT type=text name=\"TPorCM\" value=\"" + TPorCMOld + "\" size=40></TD></TR>" + 
+									"<TR><TD>&nbsp;TPorCM ?&nbsp;</TD><TD><INPUT type=text name=\"TPorCM\" value=\"" + TPorCMOld + "\" size=40></TD></TR>" + 
 									"<TR><TD>&nbsp;Counter&nbsp;</TD><TD><INPUT type=text name=\"counter\" value=\"" + counterOld + "\" size=40></TD></TR>" + 
 									"<TR><TD>&nbsp;Email&nbsp;</TD><TD><INPUT type=text name=\"email\" value=\"" + emailOld + "\" size=40></TD></TR>" + 
 									"<TR><TD COLSPAN=2><INPUT type=\"submit\" value=\"Envoyer\"></TD></TR>" + 
