@@ -4,20 +4,18 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import javax.crypto.KeyGenerator;
+import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.commons.codec.binary.Base64;
 
-@PersistenceCapable
+@PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class Secure {	
 	@PrimaryKey
 	@Persistent
 	private String key;
-	
-	@Persistent
-	private String Key;
 	
 	public Secure() {
 		this.key = "PrivateKey";
@@ -25,7 +23,7 @@ public class Secure {
 	    	KeyGenerator keyGen = KeyGenerator.getInstance("AES");
 	    	SecureRandom random = new SecureRandom();
 	    	keyGen.init(random);
-	    	this.Key = Base64.encodeBase64String(keyGen.generateKey().getEncoded());
+	    	this.key = Base64.encodeBase64String(keyGen.generateKey().getEncoded());
 	    } catch (NoSuchAlgorithmException e) {
 	    	this.key = "5E2S3b9DGj1V9Ph2";
 	    	e.printStackTrace();
@@ -33,6 +31,6 @@ public class Secure {
 	}
 
 	public String getPrivateKey() {
-		return Key;
+		return key;
 	}
 }
