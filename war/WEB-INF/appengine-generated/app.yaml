@@ -1,6 +1,6 @@
-application: 'ucl2ics'
+#application: 'ucl2ics'
 runtime: java
-version: '1'
+#version: '1'
 inbound_services:
 - warmup
 derived_file_type:
