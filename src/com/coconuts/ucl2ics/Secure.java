@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import javax.crypto.KeyGenerator;
+import javax.jdo.JDOUserException;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -11,7 +12,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.commons.codec.binary.Base64;
 
-@PersistenceCapable(identityType=IdentityType.APPLICATION)
+@PersistenceCapable
 public class Secure {	
 	@PrimaryKey
 	@Persistent
