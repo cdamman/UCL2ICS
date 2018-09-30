@@ -33,19 +33,19 @@
 		return 	"<html>" .
 				"	<head>" .
 				"		<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">" .
-				"		<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"http://ucl2icsphp.appspot.com/favicon.ico\">" .
-				"		<link rel=\"stylesheet\" type=\"text/css\" href=\"http://ucl2ics.appspot.com/css/zocial.css\">" .
-				"		<link rel=\"stylesheet\" type=\"text/css\" href=\"http://ucl2icsphp.appspot.com/ade.css\">" .
-				"		<script type=\"text/javascript\" src=\"http://ucl2icsphp.appspot.com/form.js\"></script>" .
+				"		<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"https://ucl2icsphp.appspot.com/favicon.ico\">" .
+				"		<link rel=\"stylesheet\" type=\"text/css\" href=\"https://ucl2ics.appspot.com/css/zocial.css\">" .
+				"		<link rel=\"stylesheet\" type=\"text/css\" href=\"https://ucl2icsphp.appspot.com/ade.css\">" .
+				"		<script type=\"text/javascript\" src=\"https://ucl2icsphp.appspot.com/form.js\"></script>" .
 				"		<title>UCL ADE to ICS</title>" .
 				"	</head>" .
 				"	<body>" .
-				"		<h1><a href=\"http://ucl2ics.appspot.com\" style=\"text-decoration:none; color:#000;\">UCL ADE to ICS</a> <span id=\"version\">2014-2017 App Engine EDITION (v6)</span></h1>";
+				"		<h1><a href=\"https://ucl2ics.appspot.com\" style=\"text-decoration:none; color:#000;\">UCL ADE to ICS</a> <span id=\"version\">2014-2018 App Engine EDITION (v6)</span></h1>";
 	}
 	
 	function printFooter() {
 		return 	"		<div id=\"footer\">Ré-écrit sur Google App Engine par <a href=\"http://dammanco.appspot.com\" target=\"_blank\">Corentin Damman</a>, basé sur le code de Ploki<br>" .
-				"		Voir le <a href=\"https://github.com/cdamman/UCL2ICS\" target=\"_blank\">code source App Engine</a> ! Utiliser <a href=\"http://ucl2ics.appspot.com/API.pdf\" target=\"_blank\">l'API</a></div>" .
+				"		Voir le <a href=\"https://github.com/cdamman/UCL2ICS\" target=\"_blank\">code source App Engine</a> ! Utiliser <a href=\"https://ucl2ics.appspot.com/API.pdf\" target=\"_blank\">l'API</a></div>" .
 				"	</body>" .
 				"</html>";
 	}
@@ -371,7 +371,7 @@ END:VTIMEZONE\n";
 				$codes = 'FSA13BA,minelec13,Majmeca13';
 				if(isset($_POST['codes']))
 					$codes = htmlentities($_POST['codes']);
-				$projet = 1;
+				$projet = 2;
 				if(isset($_POST['projet']))
 					$projet = (int)$_POST['projet'];
 				?>
@@ -384,7 +384,7 @@ END:VTIMEZONE\n";
 				<input type="button" value="Sélectionner cette semaine" onClick="this.form.semaines.value='<?php echo (date("W")+14)%51; ?>'">
 				<input type="button" value="Sélectionner toutes les semaines" onClick="this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51'"><br/>
 				Nous sommes en S<?php echo (date("W")+14)%51; ?>. La premiere semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19<br/>
-				<p><label for="projet"><b>ID</b> du projet (pour 2017-2018, c'est 1): </label>
+				<p><label for="projet"><b>ID</b> du projet (pour 2018-2019, c'est 2): </label>
 				<input type="text" name="projet" id="projet" value="<?php echo $projet; ?>"/></p>
 				<p><input type="checkbox" name="dh" id="dh" checked="checked"/><label for="dh"><b>dé-HURLER</b> le nom des cours</label><br>
 				<input type="checkbox" name="TPorCM" id="TPorCM" checked="checked"/><label for="TPorCM">Afficher s'il s'agit <b>d'un TP ou d'un CM</b></label></p>
@@ -419,9 +419,9 @@ END:VTIMEZONE\n";
 		
 		$email = $_POST['email'];
 		
-		$keyLink = file_get_contents("http://ucl2ics.appspot.com/set?codes=".$codes."&courses=".$cours."&weeks=".$weeks."&project=".(int)$_POST['projet']."&dh=".(isset($_POST['dh']) ? '1':'0')."&TPorCM=".(isset($_POST['TPorCM']) ? '1':'0')."&email=".$email, false, NULL);
-		//echo "http://ucl2ics.appspot.com/set?codes=".$codes."&courses=".$cours."&weeks=".$weeks."&project=".(int)$_POST['projet']."&dh=".(isset($_POST['dh']) ? '1':'0');
-		$link = "http://ucl2ics.appspot.com/get?key=".$keyLink;
+		$keyLink = file_get_contents("https://ucl2ics.appspot.com/set?codes=".$codes."&courses=".$cours."&weeks=".$weeks."&project=".(int)$_POST['projet']."&dh=".(isset($_POST['dh']) ? '1':'0')."&TPorCM=".(isset($_POST['TPorCM']) ? '1':'0')."&email=".$email, false, NULL);
+		//echo "https://ucl2ics.appspot.com/set?codes=".$codes."&courses=".$cours."&weeks=".$weeks."&project=".(int)$_POST['projet']."&dh=".(isset($_POST['dh']) ? '1':'0');
+		$link = "https://ucl2ics.appspot.com/get?key=".$keyLink;
 		
 		echo printHeader(); ?>
 			<div class="likeform">
