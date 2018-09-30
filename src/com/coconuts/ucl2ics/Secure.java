@@ -17,20 +17,22 @@ public class Secure {
 	@Persistent
 	private String key;
 	
+	@Persistent
+	private String Key;
+	
 	public Secure() {
-		this.key = "PrivateKey";
+		this.key = "5E2S3b9DGj1V9Ph2";
 	    try {
 	    	KeyGenerator keyGen = KeyGenerator.getInstance("AES");
 	    	SecureRandom random = new SecureRandom();
 	    	keyGen.init(random);
-	    	this.key = Base64.encodeBase64String(keyGen.generateKey().getEncoded());
+	    	this.Key = Base64.encodeBase64String(keyGen.generateKey().getEncoded());
 	    } catch (NoSuchAlgorithmException e) {
-	    	this.key = "5E2S3b9DGj1V9Ph2";
 	    	e.printStackTrace();
 	    }
 	}
 
 	public String getPrivateKey() {
-		return key;
+		return Key;
 	}
 }
