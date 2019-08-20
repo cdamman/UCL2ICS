@@ -40,7 +40,7 @@
 				"		<title>UCL ADE to ICS</title>" .
 				"	</head>" .
 				"	<body>" .
-				"		<h1><a href=\"https://ucl2ics.appspot.com\" style=\"text-decoration:none; color:#000;\">UCL ADE to ICS</a> <span id=\"version\">2014-2018 App Engine EDITION (v6)</span></h1>";
+				"		<h1><a href=\"https://ucl2ics.appspot.com\" style=\"text-decoration:none; color:#000;\">UCL ADE to ICS</a> <span id=\"version\">2014-2020 App Engine EDITION (v6)</span></h1>";
 	}
 	
 	function printFooter() {
@@ -286,7 +286,7 @@ END:VTIMEZONE\n";
 	
 	if(!isset($_POST['horaire']) && !(isset($_GET['codes']) && isset($_GET['courses']) && isset($_GET['weeks']) && isset($_GET['project'])))
 	{
-		//Nicolas, c'est rien que pour toi.
+		// Nicolas, c'est rien que pour toi.
 		echo printHeader();
 		
 		if (isset($_POST['codes']) && $_POST['codes']!='') {
@@ -303,7 +303,7 @@ END:VTIMEZONE\n";
 				}
 			}
 			$semaines = str_replace(", ",",",$_POST['semaines']);
-			$projectID = isset($_POST['projet']) ? (int)$_POST['projet'] : 16;
+			$projectID = isset($_POST['projet']) ? (int)$_POST['projet'] : 9;
 			$dh = isset($_POST['dh']);
 			$TPorCM = isset($_POST['TPorCM']);
 			$email = $_POST['email'];
@@ -371,11 +371,11 @@ END:VTIMEZONE\n";
 				$codes = 'FSA13BA,minelec13,Majmeca13';
 				if(isset($_POST['codes']))
 					$codes = htmlentities($_POST['codes']);
-				$projet = 2;
+				$projet = 9;
 				if(isset($_POST['projet']))
 					$projet = (int)$_POST['projet'];
 				?>
-				<center><p><label for="codes"><b>Codes cours</b> (séparés par virgules) ou <b>lien ADE</b> (donné par <a href="https://www.uclouvain.be/horaires-epl.html" target="_blank">l'outil horaire de l'EPL</a> ou celui de votre FAC): </label><br/>
+				<center><p><label for="codes"><b>Codes cours</b> (séparés par virgules) ou <b>lien ADE</b> (donné par <a href="https://uclouvain.be/fr/etudier/horaires-epl.html" target="_blank">l'outil horaire de l'EPL</a> ou celui de votre FAC): </label><br/>
 				<input type="text" name="codes" id="codes" size="130" value="<?php echo $codes;?>"/></p>
 				<p><label for="semaines"><b>Semaines</b> désirées (séparées par virgules): </label><br/>
 				<input type="text" name="semaines" id="semaines" value="<?php echo $semaines; ?>" size="130"/><br/>
@@ -384,7 +384,7 @@ END:VTIMEZONE\n";
 				<input type="button" value="Sélectionner cette semaine" onClick="this.form.semaines.value='<?php echo (date("W")+14)%51; ?>'">
 				<input type="button" value="Sélectionner toutes les semaines" onClick="this.form.semaines.value='0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51'"><br/>
 				Nous sommes en S<?php echo (date("W")+14)%51; ?>. La premiere semaine du premier quadrimestre est la semaine 0, et celle du second quadrimestre est la semaine 19<br/>
-				<p><label for="projet"><b>ID</b> du projet (pour 2018-2019, c'est 2): </label>
+				<p><label for="projet"><b>ID</b> du projet (pour 2019-2020, c'est 9): </label>
 				<input type="text" name="projet" id="projet" value="<?php echo $projet; ?>"/></p>
 				<p><input type="checkbox" name="dh" id="dh" checked="checked"/><label for="dh"><b>dé-HURLER</b> le nom des cours</label><br>
 				<input type="checkbox" name="TPorCM" id="TPorCM" checked="checked"/><label for="TPorCM">Afficher s'il s'agit <b>d'un TP ou d'un CM</b></label></p>
