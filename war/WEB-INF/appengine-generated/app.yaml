@@ -1,43 +1,30 @@
 application: 'ucl2ics'
-runtime: java
-version: '1'
+runtime: java8
+version: '8'
 inbound_services:
 - warmup
 derived_file_type:
 - java_precompiled
 threadsafe: True
+auto_id_policy: default
 api_version: '1.0'
 handlers:
+- url: (/css/.*)
+  static_files: __static__\1
+  upload: __NOT_USED__
+  require_matching_file: True
+  login: optional
+  secure: optional
+- url: (/API\.pdf)
+  static_files: __static__\1
+  upload: __NOT_USED__
+  require_matching_file: True
+  login: optional
+  secure: optional
 - url: (/favicon\.ico)
   static_files: __static__\1
   upload: __NOT_USED__
   require_matching_file: True
-  login: optional
-  secure: optional
-- url: (/ade\.css)
-  static_files: __static__\1
-  upload: __NOT_USED__
-  require_matching_file: True
-  login: optional
-  secure: optional
-- url: /modif
-  script: unused
-  login: optional
-  secure: optional
-- url: /del
-  script: unused
-  login: optional
-  secure: optional
-- url: /set
-  script: unused
-  login: optional
-  secure: optional
-- url: /get
-  script: unused
-  login: optional
-  secure: optional
-- url: /ucl2ics
-  script: unused
   login: optional
   secure: optional
 - url: /
@@ -52,7 +39,27 @@ handlers:
   script: unused
   login: optional
   secure: optional
+- url: /ucl2ics
+  script: unused
+  login: optional
+  secure: optional
+- url: /modif
+  script: unused
+  login: optional
+  secure: optional
+- url: /del
+  script: unused
+  login: optional
+  secure: optional
 - url: /admin
+  script: unused
+  login: optional
+  secure: optional
+- url: /get
+  script: unused
+  login: optional
+  secure: optional
+- url: /set
   script: unused
   login: optional
   secure: optional

@@ -1,2 +1,3 @@
 .settings/
-war/WEB-INF/classes/*
+appengine-java-sdk-1.9.76/
+out/

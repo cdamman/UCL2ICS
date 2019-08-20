@@ -57,15 +57,15 @@
 		<welcome-file>ucl2ics</welcome-file>
 	</welcome-file-list>
  <servlet>
-  <servlet-name>EndpointsServlet</servlet-name>
-  <servlet-class>com.google.api.server.spi.EndpointsServlet</servlet-class>
+  <servlet-name>SystemServiceServlet</servlet-name>
+  <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
   <init-param>
    <param-name>services</param-name>
    <param-value/>
   </init-param>
  </servlet>
  <servlet-mapping>
-  <servlet-name>EndpointsServlet</servlet-name>
-  <url-pattern>/_ah/api/*</url-pattern>
+  <servlet-name>SystemServiceServlet</servlet-name>
+  <url-pattern>/_ah/spi/*</url-pattern>
  </servlet-mapping>
 </web-app>
