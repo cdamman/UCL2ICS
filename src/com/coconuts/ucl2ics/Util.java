@@ -61,7 +61,7 @@ public final class Util {
 	
 	public static String beginHome() {
 		return 	"<form class=\"top\" id=\"formulaire\" method=\"get\" action=\"/ucl2ics\">" +
-				"<center><p><label>Cet outil a pour objectif d'exporter le calendrier universitaire fourni par <b>ADE Expert</b> (ou <a href=\"https://www.uclouvain.be/horaires-epl.html\" target=\"_blank\">l'outil horaire de l'EPL</a> ou celui de votre FAC)<br>" +
+				"<center><p><label>Cet outil a pour objectif d'exporter le calendrier universitaire fourni par <b>ADE Expert</b> (ou <a href=\"https://uclouvain.be/fr/etudier/horaires-epl.html\" target=\"_blank\">l'outil horaire de l'EPL</a> ou celui de votre FAC)<br>" +
 				" vers vos gestionnaires de calendrier préférés comme <b>Google Agenda</b> ou <b>iCalendar</b></label><br>" +
 				"<input type=\"hidden\" name=\"login\" value=\"false\"></p>" +
 				"<input type=\"submit\" value=\"Commencer !\" class=\"zocial secondary\"></center>" +
@@ -76,7 +76,7 @@ public final class Util {
 	
 	public static String beginForm(String codes, String semaines, int projectID, String email) {
 		return 	"<form class=\"top\" id=\"formulaire\" onsubmit=\"return valider(this)\" method=\"post\" action=\"https://ucl2icsphp.appspot.com/ade.php\">" +
-				"<center><p><label for=\"codes\"><b>Codes cours</b> (séparés par virgules) ou <b>lien ADE</b> (donné par <a href=\"https://www.uclouvain.be/horaires-epl.html\" target=\"_blank\">l'outil horaire de l'EPL</a> ou celui de votre FAC): </label><br/>" +
+				"<center><p><label for=\"codes\"><b>Codes cours</b> (séparés par virgules) ou <b>lien ADE</b> (donné par <a href=\"https://uclouvain.be/fr/etudier/horaires-epl.html\" target=\"_blank\">l'outil horaire de l'EPL</a> ou celui de votre FAC): </label><br/>" +
 				"<input type=\"text\" name=\"codes\" id=\"codes\" size=\"130\" value=\"" + codes + "\"/></p>" + 
 				"<p><label for=\"semaines\"><b>Semaines</b> désirées (séparées par virgules): </label><br/>" + 
 				"<input type=\"text\" name=\"semaines\" id=\"semaines\" value=\"" + semaines + "\" size=\"130\"/><br/>" + 
@@ -96,7 +96,7 @@ public final class Util {
 	
 	public static String beginFormAlert(String codes, String semaines, int projectID, String email) {
 		return 	"<form class=\"top\" id=\"formulaire\" onsubmit=\"return (valider(this) && confirm('Etes vous sur de vouloir continuer sans vous connecter ?\\nVotre horaire ICS ne sera alors plus modifiable dans le futur.\\nSi vous souhaitez vous connectez, appuyez sur Annuler et puis cliquez sur Se connecter en haut à droite.\\nPour continuer sans vous connecter, appuyez sur OK'))\" method=\"post\" action=\"https://ucl2icsphp.appspot.com/ade.php\">" +
-				"<center><p><label for=\"codes\"><b>Codes cours</b> (séparés par virgules) ou <b>lien ADE</b> (donné par <a href=\"https://www.uclouvain.be/horaires-epl.html\" target=\"_blank\">l'outil horaire de l'EPL</a> ou celui de votre FAC): </label><br/>" +
+				"<center><p><label for=\"codes\"><b>Codes cours</b> (séparés par virgules) ou <b>lien ADE</b> (donné par <a href=\"https://uclouvain.be/fr/etudier/horaires-epl.html\" target=\"_blank\">l'outil horaire de l'EPL</a> ou celui de votre FAC): </label><br/>" +
 				"<input type=\"text\" name=\"codes\" id=\"codes\" size=\"130\" value=\"" + codes + "\"/></p>" + 
 				"<p><label for=\"semaines\"><b>Semaines</b> désirées (séparées par virgules): </label><br/>" + 
 				"<input type=\"text\" name=\"semaines\" id=\"semaines\" value=\"" + semaines + "\" size=\"130\"/><br/>" + 
@@ -116,7 +116,7 @@ public final class Util {
 	
 	public static String beginFormCheckedCourses(String codes, String checkedCourses, String semaines, int projectID, String email) {
 		return 	"<form class=\"top\" id=\"formulaire\" onsubmit=\"return valider(this)\" method=\"post\" action=\"https://ucl2icsphp.appspot.com/ade.php\">" +
-				"<center><p><label for=\"codes\"><b>Codes cours</b> (séparés par virgules) ou <b>lien ADE</b> (donné par <a href=\"https://www.uclouvain.be/horaires-epl.html\" target=\"_blank\">l'outil horaire de l'EPL</a> ou celui de votre FAC): </label><br/>" +
+				"<center><p><label for=\"codes\"><b>Codes cours</b> (séparés par virgules) ou <b>lien ADE</b> (donné par <a href=\"https://uclouvain.be/fr/etudier/horaires-epl.html\" target=\"_blank\">l'outil horaire de l'EPL</a> ou celui de votre FAC): </label><br/>" +
 				"<input type=\"text\" name=\"codes\" id=\"codes\" size=\"130\" value=\"" + codes + "\"/></p>" + 
 				"<p><label for=\"semaines\"><b>Semaines</b> désirées (séparées par virgules): </label><br/>" + 
 				"<input type=\"text\" name=\"semaines\" id=\"semaines\" value=\"" + semaines + "\" size=\"130\"/><br/>" + 
