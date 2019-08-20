@@ -21,7 +21,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 @SuppressWarnings("serial")
 public class UCL2ICS extends HttpServlet {
-	public static final int projectID = 2;
+	public static final int projectID = 9;
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		doGet(req, resp);
