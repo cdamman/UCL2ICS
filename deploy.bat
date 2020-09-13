@@ -1,1 +1,1 @@
-appengine-java-sdk-1.9.76\bin\appcfg.cmd update war
+gcloud app deploy --project ucl2ics war/WEB-INF/appengine-web.xml
